@@ -1,0 +1,734 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="../img/logo_iempresa.png" type="image/png" />
+    <title>Módulo de Registro de Expediente (Fase 00) - IEmpresa</title>
+
+    <!-- SweetAlert2 -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css"
+      rel="stylesheet"
+    />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Inter:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- FontAwesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
+    />
+
+    <!-- Hoja de Estilos Centralizada -->
+    <link rel="stylesheet" href="../styles.css" />
+  </head>
+  <body>
+    <div class="main-container">
+      <!-- Panel de Imagen de Fondo Izquierda (Definida en línea de forma limpia) -->
+      <div class="image-panel image-panel-v0"></div>
+
+      <!-- Panel de Formulario -->
+      <div class="form-panel">
+        <div class="form-header">
+          <h1>Actividad de Titulación</h1>
+          <p>
+            Estimados egresados, me complace dirigirme a ustedes y extenderles
+            una cordial invitación para que completen este formulario de para
+            poder recopilar información vigente.
+          </p>
+        </div>
+
+        <!-- Barra de Progreso Superior -->
+        <div class="progress-bar">
+          <div class="progress-line" id="line"></div>
+          <div class="progress-step active" data-title="Integrantes">1</div>
+          <div class="progress-step" data-title="Académico">2</div>
+          <div class="progress-step" data-title="Titulación">3</div>
+          <div class="progress-step" data-title="Finalizar">4</div>
+        </div>
+
+        <form id="ieForm">
+          <!-- PASO 1: INTEGRANTES Y CONTACTO -->
+          <div class="form-step active" id="step0">
+            <h2
+              class="field-label"
+              style="font-size: 1.2rem; margin-bottom: 1.5rem"
+            >
+              <i
+                class="fa-solid fa-users"
+                style="color: var(--primary-ie)"
+              ></i>
+              Paso 1: Información de Integrantes y Contacto
+            </h2>
+
+            <div class="field-group">
+              <label class="field-label" for="nombre1">
+                Nombres y Apellidos Completos (1er Integrante)
+                <span class="required-star">*</span>
+              </label>
+              <input
+                type="text"
+                name="nombre1"
+                id="nombre1"
+                placeholder="Nombres y apellidos del primer integrante"
+                required
+              />
+            </div>
+
+            <div class="field-group">
+              <label class="field-label" for="nombre2">
+                Nombres y Apellidos Completos (2do Integrante)
+              </label>
+              <input
+                type="text"
+                name="nombre2"
+                id="nombre2"
+                placeholder="Nombres y apellidos del segundo integrante (opcional)"
+              />
+            </div>
+
+            <div class="field-group">
+              <label class="field-label" for="celular">
+                Número de Celular <span class="required-star">*</span>
+              </label>
+              <input
+                type="text"
+                name="celular"
+                id="celular"
+                placeholder="Ej. 987654321"
+                required
+              />
+            </div>
+
+            <div class="field-group">
+              <label class="field-label" for="correo1">
+                Correo Estudiantil (1er Integrante)
+                <span class="required-star">*</span>
+              </label>
+              <input
+                type="email"
+                name="correo1"
+                id="correo1"
+                placeholder="ejemplo.estudiante@neumann.edu.pe"
+                required
+              />
+            </div>
+
+            <div class="field-group">
+              <label class="field-label" for="correo2">
+                Correo Estudiantil (2do Integrante)
+              </label>
+              <input
+                type="email"
+                name="correo2"
+                id="correo2"
+                placeholder="ejemplo.segundo@neumann.edu.pe (opcional)"
+              />
+            </div>
+          </div>
+
+          <!-- PASO 2: DATOS PERSONALES Y ACADÉMICOS -->
+          <div class="form-step" id="step1">
+            <h2
+              class="field-label"
+              style="font-size: 1.2rem; margin-bottom: 1.5rem"
+            >
+              <i
+                class="fa-solid fa-id-card"
+                style="color: var(--primary-ie)"
+              ></i>
+              Paso 2: Información de Carrera y Documentación
+            </h2>
+
+            <div class="field-group">
+              <label class="field-label" for="dni">
+                DNI
+                <span class="required-star">*</span>
+              </label>
+              <input
+                type="text"
+                name="dni"
+                id="dni"
+                placeholder="Número de DNI (8 dígitos)"
+                maxlength="8"
+                inputmode="numeric"
+                required
+              />
+            </div>
+
+            <!-- Carrera Profesional cambiada a Botones de Opción con name="programa" -->
+            <div class="field-group">
+              <label class="field-label">
+                Carrera Profesional <span class="required-star">*</span>
+              </label>
+              <div style="display: flex; flex-direction: column; gap: 0.5rem">
+                <label
+                  class="theme-option"
+                  style="
+                    margin-bottom: 0;
+                    padding: 0.8rem;
+                    display: flex;
+                    align-items: center;
+                    border-radius: 8px;
+                  "
+                >
+                  <input
+                    type="radio"
+                    name="programa"
+                    value="Administración de Negocios Internacionales"
+                    required
+                    style="cursor: pointer"
+                  />
+                  <span
+                    style="margin-left: 8px; cursor: pointer; font-weight: 500"
+                  >
+                    Administración de Negocios Internacionales (ADNI)
+                  </span>
+                </label>
+                <label
+                  class="theme-option"
+                  style="
+                    margin-bottom: 0;
+                    padding: 0.8rem;
+                    display: flex;
+                    align-items: center;
+                    border-radius: 8px;
+                  "
+                >
+                  <input
+                    type="radio"
+                    name="programa"
+                    value="Contabilidad"
+                    style="cursor: pointer"
+                  />
+                  <span
+                    style="margin-left: 8px; cursor: pointer; font-weight: 500"
+                  >
+                    Contabilidad (CONTA)
+                  </span>
+                </label>
+              </div>
+            </div>
+
+            <!-- Modalidad de Estudio cambiada a Botones de Opción -->
+            <div class="field-group">
+              <label class="field-label">
+                Modalidad de Estudio <span class="required-star">*</span>
+              </label>
+              <div style="display: flex; flex-direction: column; gap: 0.5rem">
+                <label
+                  class="theme-option"
+                  style="
+                    margin-bottom: 0;
+                    padding: 0.8rem;
+                    display: flex;
+                    align-items: center;
+                    border-radius: 8px;
+                  "
+                >
+                  <input
+                    type="radio"
+                    name="modalidad_estudio"
+                    value="Presencial"
+                    required
+                    style="cursor: pointer"
+                  />
+                  <span
+                    style="margin-left: 8px; cursor: pointer; font-weight: 500"
+                  >
+                    Presencial
+                  </span>
+                </label>
+                <label
+                  class="theme-option"
+                  style="
+                    margin-bottom: 0;
+                    padding: 0.8rem;
+                    display: flex;
+                    align-items: center;
+                    border-radius: 8px;
+                  "
+                >
+                  <input
+                    type="radio"
+                    name="modalidad_estudio"
+                    value="Semipresencial"
+                    style="cursor: pointer"
+                  />
+                  <span
+                    style="margin-left: 8px; cursor: pointer; font-weight: 500"
+                  >
+                    Semipresencial
+                  </span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- PASO 3: MODALIDAD DE TITULACIÓN Y POLÍTICA DE PRIVACIDAD -->
+          <div class="form-step" id="step2">
+            <h2
+              class="field-label"
+              style="font-size: 1.2rem; margin-bottom: 1.5rem"
+            >
+              <i
+                class="fa-solid fa-gavel"
+                style="color: var(--primary-ie)"
+              ></i>
+              Paso 3: Modalidad de Titulación y Consentimiento
+            </h2>
+
+            <!-- Modalidad de Titulación cambiada a Botones de Opción -->
+            <div class="field-group">
+              <label class="field-label">
+                Modalidad de Titulación <span class="required-star">*</span>
+              </label>
+              <div style="display: flex; flex-direction: column; gap: 0.5rem">
+                <label
+                  class="theme-option"
+                  style="
+                    margin-bottom: 0;
+                    padding: 0.8rem;
+                    display: flex;
+                    align-items: center;
+                    border-radius: 8px;
+                  "
+                >
+                  <input
+                    type="radio"
+                    name="modalidad_titulacion"
+                    value="Trabajo de Aplicación Profesional"
+                    required
+                    style="cursor: pointer"
+                  />
+                  <span
+                    style="margin-left: 8px; cursor: pointer; font-weight: 500"
+                  >
+                    Trabajo de Aplicación Profesional
+                  </span>
+                </label>
+                <label
+                  class="theme-option"
+                  style="
+                    margin-bottom: 0;
+                    padding: 0.8rem;
+                    display: flex;
+                    align-items: center;
+                    border-radius: 8px;
+                  "
+                >
+                  <input
+                    type="radio"
+                    name="modalidad_titulacion"
+                    value="Examen de Suficiencia Profesional"
+                    style="cursor: pointer"
+                  />
+                  <span
+                    style="margin-left: 8px; cursor: pointer; font-weight: 500"
+                  >
+                    Examen de Suficiencia Profesional
+                  </span>
+                </label>
+              </div>
+            </div>
+
+            <!-- Políticas de Privacidad -->
+            <div class="field-group" style="margin-top: 2rem">
+              <label
+                class="field-label"
+                style="line-height: 1.5; font-weight: 500"
+              >
+                Declaro haber leído la
+                <a
+                  href="https://www.neumann.edu.pe/politicasdeprivacidad/"
+                  target="_blank"
+                  class="policy-link"
+                  style="
+                    color: var(--primary-ie);
+                    font-weight: 600;
+                    text-decoration: underline;
+                  "
+                >
+                  política de privacidad de Neumann
+                </a>
+                y doy consentimiento para el tratamiento de mis datos personales
+                de acuerdo a los términos de esta.
+                <span class="required-star">*</span>
+              </label>
+
+              <div style="display: flex; gap: 20px; margin-top: 15px">
+                <label
+                  class="theme-option"
+                  style="
+                    margin-bottom: 0;
+                    flex: 1;
+                    padding: 0.8rem;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    border-radius: 8px;
+                  "
+                >
+                  <input
+                    type="radio"
+                    id="politica_si"
+                    name="politica"
+                    value="Sí"
+                    style="cursor: pointer"
+                  />
+                  <span
+                    style="margin-left: 8px; cursor: pointer; font-weight: 600"
+                    >Sí, acepto</span
+                  >
+                </label>
+                <label
+                  class="theme-option"
+                  style="
+                    margin-bottom: 0;
+                    flex: 1;
+                    padding: 0.8rem;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    border-radius: 8px;
+                  "
+                >
+                  <input
+                    type="radio"
+                    id="politica_no"
+                    name="politica"
+                    value="No"
+                    style="cursor: pointer"
+                  />
+                  <span
+                    style="margin-left: 8px; cursor: pointer; font-weight: 600"
+                    >No acepto</span
+                  >
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- PASO 4: PROCESAMIENTO FINAL -->
+          <div class="form-step" id="step3">
+            <div
+              class="loader-container"
+              id="finalLoader"
+              style="display: block"
+            >
+              <i
+                class="fa-solid fa-paper-plane fa-3x"
+                style="color: var(--primary-ie); margin-bottom: 1rem"
+              ></i>
+              <h3 id="statusText">Enviar Solicitud</h3>
+              <p id="subStatus">
+                Haz clic en el botón "FINALIZAR" para enviar tu expediente al
+                sistema.
+              </p>
+              <div class="progress-custom">
+                <div class="progress-fill" id="finalBar"></div>
+              </div>
+            </div>
+            <div
+              id="resultCard"
+              style="display: none; text-align: center"
+            ></div>
+          </div>
+
+          <!-- Botonera de Navegación -->
+          <div class="navigation-buttons">
+            <button
+              type="button"
+              class="nav-btn btn-prev"
+              id="prevBtn"
+              disabled
+            >
+              Anterior
+            </button>
+            <button type="button" class="nav-btn btn-next" id="nextBtn">
+              Siguiente
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+      const WEB_APP_URL =
+        "https://script.google.com/macros/s/AKfycbwMNTyzrulP88Riq_v2QTtJbcLIBfgS1U2jvV9GSbl_UswHqY9kX4TW02LZifkrq3VE/exec";
+      let currentStep = 0;
+      const totalSteps = 4;
+
+      const form = document.getElementById("ieForm");
+      const nextBtn = document.getElementById("nextBtn");
+      const prevBtn = document.getElementById("prevBtn");
+      const steps = document.querySelectorAll(".form-step");
+      const circles = document.querySelectorAll(".progress-step");
+      const line = document.getElementById("line");
+
+      // Filtrar entrada de DNI para que solo admita números al escribir
+      document.getElementById("dni").addEventListener("input", function (e) {
+        this.value = this.value.replace(/\D/g, "").substring(0, 8);
+      });
+
+      function updateUI() {
+        steps.forEach((step, idx) => {
+          step.classList.toggle("active", idx === currentStep);
+        });
+
+        circles.forEach((circle, idx) => {
+          circle.classList.toggle("active", idx <= currentStep);
+        });
+
+        const width = (currentStep / (totalSteps - 1)) * 100;
+        line.style.width = width + "%";
+
+        prevBtn.disabled = currentStep === 0;
+
+        if (currentStep === totalSteps - 1) {
+          nextBtn.innerHTML = "FINALIZAR";
+        } else {
+          nextBtn.innerHTML = "Siguiente";
+        }
+
+        if (document.getElementById("resultCard").style.display === "block") {
+          nextBtn.style.display = "none";
+          prevBtn.style.display = "none";
+        }
+      }
+
+      function validate() {
+        if (currentStep === 0) {
+          const n1 = document.getElementById("nombre1").value.trim();
+          const cel = document.getElementById("celular").value.trim();
+          const email = document.getElementById("correo1").value.trim();
+
+          if (!n1) {
+            Swal.fire(
+              "Atención",
+              "El nombre del primer integrante es obligatorio.",
+              "warning",
+            );
+            return false;
+          }
+          if (!cel) {
+            Swal.fire(
+              "Atención",
+              "El número de celular es obligatorio.",
+              "warning",
+            );
+            return false;
+          }
+          if (!email) {
+            Swal.fire(
+              "Atención",
+              "El correo institucional es obligatorio.",
+              "warning",
+            );
+            return false;
+          }
+          if (!email.includes("@")) {
+            Swal.fire(
+              "Error",
+              "Ingresa una dirección de correo válida.",
+              "error",
+            );
+            return false;
+          }
+        }
+
+        if (currentStep === 1) {
+          const dni = document.getElementById("dni").value.trim();
+          const programaChecked = document.querySelector(
+            'input[name="programa"]:checked',
+          );
+          const modalidadEstudioChecked = document.querySelector(
+            'input[name="modalidad_estudio"]:checked',
+          );
+
+          if (!dni) {
+            Swal.fire(
+              "Atención",
+              "El DNI o documento de identidad es obligatorio.",
+              "warning",
+            );
+            return false;
+          }
+
+          const dniRegex = /^\d{8}$/;
+          if (!dniRegex.test(dni)) {
+            Swal.fire(
+              "Atención",
+              "El DNI debe contener exactamente 8 dígitos numéricos.",
+              "warning",
+            );
+            return false;
+          }
+
+          if (!programaChecked) {
+            Swal.fire(
+              "Atención",
+              "Por favor, selecciona tu carrera profesional.",
+              "warning",
+            );
+            return false;
+          }
+          if (!modalidadEstudioChecked) {
+            Swal.fire(
+              "Atención",
+              "Por favor, selecciona tu modalidad de estudio.",
+              "warning",
+            );
+            return false;
+          }
+        }
+
+        if (currentStep === 2) {
+          const modalidadTitulacionChecked = document.querySelector(
+            'input[name="modalidad_titulacion"]:checked',
+          );
+          const politicaChecked = document.querySelector(
+            'input[name="politica"]:checked',
+          );
+
+          if (!modalidadTitulacionChecked) {
+            Swal.fire(
+              "Atención",
+              "Por favor, selecciona tu modalidad de titulación.",
+              "warning",
+            );
+            return false;
+          }
+
+          if (!politicaChecked) {
+            Swal.fire(
+              "Atención",
+              "Por favor, indica si aceptas las políticas de privacidad.",
+              "warning",
+            );
+            return false;
+          }
+        }
+        return true;
+      }
+
+      nextBtn.addEventListener("click", () => {
+        if (validate()) {
+          if (currentStep < totalSteps - 1) {
+            currentStep++;
+            updateUI();
+          } else {
+            submitForm();
+          }
+        }
+      });
+
+      prevBtn.addEventListener("click", () => {
+        if (currentStep > 0) {
+          currentStep--;
+          updateUI();
+        }
+      });
+
+      async function submitForm() {
+        const statusText = document.getElementById("statusText");
+        const subStatus = document.getElementById("subStatus");
+        const finalBar = document.getElementById("finalBar");
+        const email = document.getElementById("correo1").value.trim();
+
+        nextBtn.disabled = true;
+        prevBtn.disabled = true;
+
+        // Asegurar que el loader sea visible
+        document.getElementById("finalLoader").style.display = "block";
+        document.getElementById("resultCard").style.display = "none";
+
+        statusText.innerText = "Comprobando duplicados...";
+        subStatus.style.display = "none";
+        finalBar.style.width = "25%";
+
+        try {
+          // 1. Verificación previa
+          const checkResponse = await fetch(WEB_APP_URL, {
+            method: "POST",
+            body: JSON.stringify({
+              action: "validarCorreoFase1",
+              data: { correo: email },
+            }),
+          });
+
+          const checkResult = await checkResponse.json();
+          if (checkResult.status === "error") {
+            Swal.fire("Registro existente", checkResult.message, "warning");
+            currentStep = 0; // Regresar al inicio para corregir
+            updateUI();
+            nextBtn.disabled = false;
+            prevBtn.disabled = false;
+            return;
+          }
+
+          statusText.innerText = "Generando expediente IEmpresa...";
+          finalBar.style.width = "65%";
+
+          const formData = new FormData(form);
+          const userParams = Object.fromEntries(formData.entries());
+
+          if (userParams.dni) {
+            // Aseguramos que tenga 8 dígitos (por si acaso) y anteponemos ' para Google Sheets
+            let dniLimpio = userParams.dni.toString().padStart(8, "0");
+            userParams.dni = "'" + dniLimpio;
+          }
+
+          // ENVIAR
+          const response = await fetch(WEB_APP_URL, {
+            method: "POST",
+            body: JSON.stringify({
+              action: "crearExpedienteFase00",
+              data: userParams,
+            }),
+          });
+
+          const result = await response.json();
+
+          if (result.status === "success") {
+            finalBar.style.width = "100%";
+            document.getElementById("finalLoader").style.display = "none";
+            document.getElementById("resultCard").style.display = "block";
+            document.getElementById("resultCard").innerHTML = `
+              <div style="padding: 2rem;">
+                <i class="fa-solid fa-circle-check fa-4x" style="color: #22c55e; margin-bottom: 1.5rem;"></i>
+                <h2 style="color: var(--dark-ie); font-weight: 700; margin-bottom: 1rem;">¡Expediente Iniciado!</h2>
+                <p style="color: var(--text-muted); font-size: 1.1rem; line-height: 1.6; margin-bottom: 2rem;">
+                  Tu solicitud para la modalidad de <b>${userParams.modalidad_titulacion}</b> ha sido procesada con éxito. 
+                </p>
+                <button onclick="location.reload()" class="nav-btn btn-next" style="margin: 0 auto; display: inline-block; float: none;">
+                  Llenar otro registro
+                </button>
+              </div>
+            `;
+            updateUI();
+            Swal.fire("¡Éxito!", "Registro completado.", "success");
+            updateUI();
+            Swal.fire("¡Éxito!", "Registro completado.", "success");
+          } else {
+            throw new Error(result.message);
+          }
+        } catch (err) {
+          console.error(err);
+          Swal.fire("Error", "No se pudo procesar: " + err.message, "error");
+          nextBtn.disabled = false;
+          prevBtn.disabled = false;
+        }
+      }
+    </script>
+  </body>
+</html>

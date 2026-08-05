@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="../img/logo_iempresa.png" type="image/png" />
+    <title>Sustentación del Proyecto</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="../styles.css" />
+  </head>
+  <body>
+    <div class="main-container">
+      <!-- Se añadieron las clases correspondientes y se quitó el estilo en línea -->
+      <div class="image-panel image-panel-v5"></div>
+
+      <div class="form-panel" style="justify-content: center">
+        <div class="form-header">
+          <h1>Sustentación Final</h1>
+          <p>
+            Ingresa tu ID de equipo y el enlace de YouTube de tu video de
+            defensa para que el comité pueda calificar tu sustentación.
+          </p>
+        </div>
+
+        <form id="sustentacionForm">
+          <div class="field-group">
+            <label class="field-label"
+              >ID de Pedido (Ej. IE-180000000)
+              <span class="required-star">*</span></label
+            >
+            <input
+              type="text"
+              id="idPedido"
+              placeholder="Ingresa tu ID exacto"
+              required
+            />
+          </div>
+
+          <div class="field-group">
+            <label class="field-label"
+              >Enlace de Video en YouTube
+              <span class="required-star">*</span></label
+            >
+            <!-- Contenedor del input con icono mejorado -->
+            <div class="input-with-icon" style="position: relative">
+              <i
+                class="fa-brands fa-youtube"
+                style="
+                  position: absolute;
+                  left: 15px;
+                  top: 50%;
+                  transform: translateY(-50%);
+                  color: #ff0000;
+                  font-size: 1.4rem;
+                "
+              ></i>
+              <input
+                type="url"
+                id="urlVideo"
+                placeholder="https://www.youtube.com/watch?v=..."
+                style="padding-left: 50px; height: 3.5rem"
+                required
+              />
+            </div>
+            <small
+              class="text-muted"
+              style="font-size: 0.85rem; margin-top: 8px; display: block"
+            >
+              <i class="fa-solid fa-circle-info"></i> Asegúrate de que el video
+              esté configurado como <strong>Público</strong> o
+              <strong>Oculto</strong>.
+            </small>
+          </div>
+
+          <div id="youtubePreview" class="youtube-preview">
+            <p
+              style="
+                font-size: 0.9rem;
+                font-weight: 600;
+                color: #166534;
+                margin-bottom: 0;
+              "
+            >
+              <i class="fa-solid fa-check-circle"></i> Formato de enlace
+              detectado correctamente
+            </p>
+          </div>
+
+          <button
+            type="button"
+            class="nav-btn btn-next"
+            id="btnEnviar"
+            style="
+              width: 100%;
+              margin-top: 2rem;
+              height: 3.5rem;
+              font-size: 1.1rem;
+            "
+          >
+            <i class="fa-solid fa-cloud-arrow-up"></i> Entregar Sustentación
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="config.js"></script>
+    <script>
+      const WEB_APP_URL =
+        "https://script.google.com/macros/s/AKfycbwMNTyzrulP88Riq_v2QTtJbcLIBfgS1U2jvV9GSbl_UswHqY9kX4TW02LZifkrq3VE/exec";
+
+      const idInput = document.getElementById("idPedido");
+      const urlInput = document.getElementById("urlVideo");
+      const btnEnviar = document.getElementById("btnEnviar");
+      const preview = document.getElementById("youtubePreview");
+
+      // Validación en tiempo real del link de YouTube
+      // Validación en tiempo real con comprobación de existencia
+      urlInput.addEventListener("input", async () => {
+        const url = urlInput.value.trim();
+        const ytRegex = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/.+$/;
+
+        if (ytRegex.test(url)) {
+          // Intentamos obtener metadatos básicos para confirmar existencia
+          try {
+            // Usamos el servicio oembed de youtube para validar disponibilidad
+            const res = await fetch(
+              `https://www.youtube.com/oembed?url=${url}&format=json`,
+            );
+            if (res.ok) {
+              const data = await res.json();
+              preview.style.display = "block";
+              preview.innerHTML = `
+                <p style="font-size: 0.9rem; font-weight: 600; color: #166534; margin-bottom: 5px;">
+                  <i class="fa-solid fa-check-circle"></i> Video detectado: "${data.title}"
+                </p>
+                <img src="${data.thumbnail_url}" style="width: 120px; border-radius: 8px; border: 2px solid #166534;">
+              `;
+            } else {
+              mostrarErrorUrl();
+            }
+          } catch (e) {
+            // Si hay error de CORS o red, al menos validamos que el regex sea correcto
+            preview.style.display = "block";
+            preview.innerHTML = `<p style="color: #b45309;"><i class="fa-solid fa-triangle-exclamation"></i> Formato válido (No se pudo verificar disponibilidad)</p>`;
+          }
+        } else {
+          preview.style.display = "none";
+        }
+      });
+
+      function mostrarErrorUrl() {
+        preview.style.display = "block";
+        preview.innerHTML = `<p style="color: #dc2626; font-weight: 600;"><i class="fa-solid fa-circle-xmark"></i> El video no existe o es privado</p>`;
+      }
+
+      btnEnviar.addEventListener("click", async () => {
+        const idPedido = idInput.value.trim();
+        const urlVideo = urlInput.value.trim();
+        const ytRegex = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/.+$/;
+
+        if (!idPedido || !urlVideo) {
+          return Swal.fire(
+            "Atención",
+            "Todos los campos son obligatorios.",
+            "warning",
+          );
+        }
+
+        if (!ytRegex.test(urlVideo)) {
+          return Swal.fire(
+            "URL Inválida",
+            "Por favor ingresa un enlace de YouTube válido.",
+            "error",
+          );
+        }
+
+        // --- VALIDACIÓN DE EXISTENCIA REAL ---
+        Swal.fire({
+          title: "Validando video...",
+          text: "Comprobando disponibilidad en YouTube",
+          allowOutsideClick: false,
+          didOpen: () => Swal.showLoading(),
+        });
+
+        try {
+          const videoCheck = await fetch(
+            `https://www.youtube.com/oembed?url=${urlVideo}&format=json`,
+          );
+          if (!videoCheck.ok) {
+            return Swal.fire(
+              "Video no disponible",
+              "No pudimos encontrar el video. Asegúrate de que no sea privado y que el enlace sea correcto.",
+              "error",
+            );
+          }
+
+          // --- VALIDACIÓN DE ID EN BASE DE DATOS (Pre-flight) ---
+          const checkRes = await fetch(WEB_APP_URL, {
+            method: "POST",
+            body: JSON.stringify({
+              action: "validarCargaFase5",
+              data: { idPedido },
+            }),
+          });
+          const checkData = await checkRes.json();
+
+          if (checkData.status !== "success") {
+            return Swal.fire("Error", checkData.message, "error");
+          }
+
+          // --- ENVÍO DEFINITIVO ---
+          Swal.fire({
+            title: "Enviando sustentación...",
+            text: "Registrando tu video en el sistema IEmpresa...",
+            allowOutsideClick: false,
+            didOpen: () => Swal.showLoading(),
+          });
+
+          const res = await fetch(WEB_APP_URL, {
+            method: "POST",
+            body: JSON.stringify({
+              action: "subirVideoFase5",
+              data: { idPedido, urlVideo },
+            }),
+          });
+          const data = await res.json();
+
+          if (data.status === "success") {
+            Swal.fire({
+              title: "¡Entrega Exitosa!",
+              text: data.message,
+              icon: "success",
+              confirmButtonText: "Entendido",
+            }).then(() => {
+              idInput.value = "";
+              urlInput.value = "";
+              preview.style.display = "none";
+            });
+          } else {
+            throw new Error(data.message);
+          }
+        } catch (err) {
+          Swal.fire(
+            "Error",
+            err.message || "No se pudo verificar el video.",
+            "error",
+          );
+        }
+      });
+    </script>
+  </body>
+</html>

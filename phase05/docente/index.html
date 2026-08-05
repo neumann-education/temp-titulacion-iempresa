@@ -1,0 +1,319 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="../../img/logo_iempresa.png" type="image/png" />
+    <title>Panel de Evaluación Docente - IEmpresa</title>
+
+    <!-- Premium Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="docente.css" />
+  </head>
+  <body>
+    <!-- SPLASH SCREEN ANIMADO -->
+    <div id="splash-screen" style="display: none">
+      <div class="splash-content">
+        <div class="orbs-container">
+          <div
+            class="orb orb-f1"
+            data-bs-toggle="tooltip"
+            title="Fase 1: Base"
+          ></div>
+          <div
+            class="orb orb-f2"
+            data-bs-toggle="tooltip"
+            title="Fase 2: Prototipo"
+          ></div>
+          <div
+            class="orb orb-f3"
+            data-bs-toggle="tooltip"
+            title="Fase 3: Dictamen"
+          ></div>
+          <div
+            class="orb orb-f4"
+            data-bs-toggle="tooltip"
+            title="Fase 4: Preguntas"
+          ></div>
+          <div
+            class="orb orb-f5"
+            data-bs-toggle="tooltip"
+            title="Fase 4.1: Video"
+          ></div>
+          <div
+            class="orb orb-f6"
+            data-bs-toggle="tooltip"
+            title="Fase 4.2: Final"
+          ></div>
+        </div>
+        <h2 class="splash-title">IEMPRESA ENGINE</h2>
+        <p class="splash-subtitle" id="splash-text">
+          Estableciendo enlace seguro...
+        </p>
+        <div class="progress-frame mt-4">
+          <div class="progress-container">
+            <div
+              class="progress-bar-fill"
+              id="splash-progress"
+              style="width: 0%"
+            ></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PANTALLA DE LOGIN HIGH-TECH -->
+    <div
+      id="login-container"
+      class="d-flex align-items-center justify-content-center min-vh-100 login-bg"
+    >
+      <div
+        class="card p-5 border-0 login-card"
+        style="width: 100%; max-width: 440px"
+      >
+        <div class="text-center mb-4">
+          <div class="login-icon-wrapper mb-3">
+            <i class="fas fa-graduation-cap"></i>
+          </div>
+          <h3 class="fw-bold text-dark mb-1">Panel Docente</h3>
+          <p class="text-muted small">Acceso exclusivo Evaluadores IEmpresa</p>
+        </div>
+
+        <div class="mb-3 form-floating">
+          <input
+            type="text"
+            id="login_user"
+            class="form-control"
+            placeholder="Usuario"
+            autocomplete="off"
+          />
+          <label for="login_user"
+            ><i class="fas fa-user text-muted me-2"></i>Usuario</label
+          >
+        </div>
+        <div class="mb-4 form-floating">
+          <input
+            type="password"
+            id="login_pass"
+            class="form-control"
+            placeholder="Contraseña"
+          />
+          <label for="login_pass"
+            ><i class="fas fa-lock text-muted me-2"></i>Contraseña</label
+          >
+        </div>
+        <button
+          id="btn-login"
+          class="btn btn-dark w-100 fw-bold py-3 login-btn"
+          onclick="iniciarSesion()"
+        >
+          <span class="btn-text"
+            >Autenticar Acceso <i class="fas fa-arrow-right ms-2"></i
+          ></span>
+          <span
+            class="spinner-border spinner-border-sm d-none"
+            role="status"
+            aria-hidden="true"
+          ></span>
+        </button>
+      </div>
+    </div>
+
+    <!-- DASHBOARD PRINCIPAL (OCULTO AL INICIO) -->
+    <div id="main-dashboard" class="d-none">
+      <!-- Navbar Adaptado para Mostrar Usuario Activo -->
+      <nav
+        class="navbar navbar-dark navbar-custom shadow-sm d-flex justify-content-between px-4 align-items-center"
+      >
+        <span class="navbar-brand fw-bold mb-0 text-white">
+          <i class="fas fa-graduation-cap me-2"></i> IEmpresa | Panel Docente
+        </span>
+        <div class="d-flex align-items-center">
+          <!-- Indicador de Docente Logueado (Oculto en pantallas muy pequeñas) -->
+          <span class="text-light me-3 d-none d-sm-inline-block small">
+            <i class="fas fa-user-circle me-1 text-info"></i> Usuario:
+            <span id="logged-user" class="fw-bold text-white text-capitalize"
+              >Cargando...</span
+            >
+          </span>
+
+          <!-- Enlace de Rúbrica -->
+          <a
+            href="https://drive.google.com/file/d/1cYPHtk_y2nIAktoWpnKJ9EbVCk0yKXv0/view?usp=sharing"
+            target="_blank"
+            class="btn btn-sm btn-info text-white fw-bold me-2 shadow-sm"
+          >
+            <i class="fas fa-file-pdf"></i> Rúbrica de Evaluación
+          </a>
+
+          <!-- Botón de Sincronización -->
+          <button
+            class="btn btn-sm btn-outline-light me-2"
+            onclick="cargarDatos()"
+          >
+            <i class="fas fa-sync"></i> Actualizar
+          </button>
+
+          <!-- Botón de Desloguear (Llama a cerrarSesion) -->
+          <button
+            class="btn btn-sm btn-outline-danger text-white fw-bold"
+            onclick="cerrarSesion()"
+          >
+            <i class="fas fa-sign-out-alt"></i> Salir
+          </button>
+        </div>
+      </nav>
+
+      <div class="main-container">
+        <!-- Panel Izquierdo: Lista de Estudiantes -->
+        <div class="sidebar">
+          <!-- Se aumentó el padding (py-4) y el margen del título (mb-4) -->
+          <div class="p-3 py-4 border-bottom bg-light">
+            <h6
+              class="fw-bold mb-4 text-secondary text-uppercase"
+              style="letter-spacing: 1px; font-size: 0.75rem"
+            >
+              <i class="fas fa-users me-2 text-primary"></i>Sustentaciones
+            </h6>
+
+            <!-- Filtro de videos con margen adicional -->
+            <div
+              class="btn-group w-100 shadow-sm"
+              role="group"
+              aria-label="Filtro de videos"
+            >
+              <button
+                type="button"
+                class="btn btn-sm btn-outline-primary active btn-filtro"
+                data-filtro="todos"
+              >
+                Todos
+              </button>
+              <button
+                type="button"
+                class="btn btn-sm btn-outline-warning btn-filtro"
+                data-filtro="pendiente"
+              >
+                Pendientes
+              </button>
+              <button
+                type="button"
+                class="btn btn-sm btn-outline-success btn-filtro"
+                data-filtro="calificado"
+              >
+                Calificados
+              </button>
+            </div>
+          </div>
+
+          <div id="listaEstudiantes" class="flex-grow-1 overflow-auto">
+            <div class="p-4 text-center text-muted small">
+              Cargando registros...
+            </div>
+          </div>
+        </div>
+
+        <!-- Panel Derecho: Video y Herramientas -->
+        <div class="content-area">
+          <div id="panelVacio" class="empty-state">
+            <i
+              class="fas fa-play-circle fa-4x mb-3 text-secondary"
+              style="opacity: 0.5"
+            ></i>
+            <h4>Selecciona un estudiante</h4>
+            <p>
+              Haz clic en un registro del panel izquierdo para visualizar su
+              defensa y evaluarlo.
+            </p>
+          </div>
+
+          <div id="panelEvaluacion" class="d-none d-flex flex-column h-100">
+            <!-- Video -->
+            <div class="video-container" id="videoWrapper"></div>
+
+            <!-- Área de Evaluación -->
+            <div class="evaluation-panel">
+              <div class="row h-100">
+                <!-- Columna de Preguntas -->
+                <div class="col-lg-8">
+                  <h6 class="fw-bold text-primary mb-3">
+                    <i class="fas fa-question-circle me-2"></i>Preguntas de
+                    Defensa
+                  </h6>
+                  <div
+                    id="preguntasContainer"
+                    style="
+                      max-height: 250px;
+                      overflow-y: auto;
+                      padding-right: 10px;
+                    "
+                  ></div>
+                </div>
+
+                <!-- Columna de Calificación -->
+                <div class="col-lg-4 border-start">
+                  <h6 class="fw-bold text-dark mb-3">Calificación Final</h6>
+
+                  <div class="mb-3 mt-4">
+                    <label class="form-label fw-bold"
+                      >Nota de Defensa
+                      <small class="text-muted">(0-20)</small></label
+                    >
+                    <input
+                      type="number"
+                      id="inputNotaF5"
+                      class="form-control form-control-lg text-center fw-bold"
+                      placeholder="00"
+                      min="0"
+                      max="20"
+                    />
+                  </div>
+
+                  <div class="mb-3">
+                    <label class="form-label fw-bold small text-secondary"
+                      >Observaciones / Feedback Académico</label
+                    >
+                    <textarea
+                      id="inputObsF5"
+                      class="form-control"
+                      rows="4"
+                      style="font-size: 0.9rem"
+                      placeholder="Escriba aquí los comentarios detallados de la sustentación para el registro..."
+                    ></textarea>
+                  </div>
+
+                  <button
+                    class="btn btn-success w-100 py-2 fw-bold shadow-sm mt-3"
+                    onclick="enviarCalificacion()"
+                  >
+                    <i class="fas fa-save me-2"></i> Guardar Calificación
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script src="docente.js"></script>
+  </body>
+</html>
