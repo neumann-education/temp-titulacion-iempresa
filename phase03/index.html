@@ -1,0 +1,292 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="../img/logo_iempresa.png" type="image/png" />
+    <title>Centro de Evaluación Académica (Fase 03)</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="../styles.css" />
+  </head>
+  <body>
+    <div class="main-container main-container-reverse">
+      <div class="image-panel image-panel-v3"></div>
+
+      <div class="form-panel" style="justify-content: center">
+        <div class="form-header">
+          <h1>Fase 03: Formato Oficial Documental</h1>
+          <p>Ingresa tu ID de equipo y sube el Prototipo trabajado (en PDF).</p>
+        </div>
+
+        <form id="uploadForm">
+          <div class="field-group">
+            <label class="field-label"
+              >ID de Pedido (Ej. IE-180000000)
+              <span class="required-star">*</span></label
+            >
+            <input
+              type="text"
+              id="idPedido"
+              placeholder="Ingresa tu ID exacto"
+              required
+            />
+          </div>
+
+          <div class="field-group">
+            <label class="field-label"
+              >Prototipo Mejorado (Solo PDF)
+              <span class="required-star">*</span></label
+            >
+            <div
+              class="upload-area"
+              id="dropZone"
+              onclick="document.getElementById('archivoPdf').click()"
+            >
+              <i class="fa-solid fa-cloud-arrow-up"></i>
+              <p>Haz clic o arrastra tu PDF aquí</p>
+              <input
+                type="file"
+                id="archivoPdf"
+                accept=".pdf"
+                style="display: none"
+                required
+              />
+              <div id="fileInfo">Ningún archivo seleccionado</div>
+            </div>
+          </div>
+
+          <button
+            type="button"
+            class="nav-btn btn-next"
+            id="btnSubir"
+            style="width: 100%; margin-top: 1rem"
+          >
+            <i class="fa-solid fa-paper-plane"></i> Enviar para el Dictamen de
+            Evaluación Académica
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="config.js"></script>
+    <script>
+      const WEB_APP_URL =
+        "https://script.google.com/macros/s/AKfycbwMNTyzrulP88Riq_v2QTtJbcLIBfgS1U2jvV9GSbl_UswHqY9kX4TW02LZifkrq3VE/exec";
+
+      const fileInput = document.getElementById("archivoPdf");
+      const fileInfo = document.getElementById("fileInfo");
+      const btnSubir = document.getElementById("btnSubir");
+      const dropZone = document.getElementById("dropZone");
+      const MAX_SIZE_MB = 10;
+
+      // --- 1. LÓGICA DE ARRASTRAR Y SOLTAR ---
+      ["dragenter", "dragover", "dragleave", "drop"].forEach((eventName) => {
+        dropZone.addEventListener(
+          eventName,
+          (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+          },
+          false,
+        );
+      });
+
+      ["dragenter", "dragover"].forEach((eventName) => {
+        dropZone.addEventListener(
+          "dragover",
+          () => dropZone.classList.add("dragover"),
+          false,
+        );
+      });
+
+      ["dragleave", "drop"].forEach((eventName) => {
+        dropZone.addEventListener(
+          "dragleave",
+          () => dropZone.classList.remove("dragover"),
+          false,
+        );
+      });
+
+      dropZone.addEventListener("drop", (e) => {
+        const dt = e.dataTransfer;
+        const files = dt.files;
+        if (files.length > 0) {
+          const file = files[0];
+          if (file.type === "application/pdf") {
+            fileInput.files = files;
+            fileInfo.textContent = file.name;
+          } else {
+            Swal.fire(
+              "Archivo no válido",
+              "Por favor, sube solo archivos PDF.",
+              "error",
+            );
+          }
+        }
+      });
+
+      fileInput.addEventListener("change", (e) => {
+        if (e.target.files.length > 0) {
+          fileInfo.textContent = e.target.files[0].name;
+        } else {
+          fileInfo.textContent = "Ningún archivo seleccionado";
+        }
+      });
+
+      // --- 2. LÓGICA DE ENVÍO ---
+      btnSubir.addEventListener("click", async () => {
+        const idPedido = document.getElementById("idPedido").value.trim();
+        const file = fileInput.files[0];
+
+        if (!idPedido || !file) {
+          return Swal.fire(
+            "Atención",
+            "Debes ingresar tu ID y seleccionar un PDF.",
+            "warning",
+          );
+        }
+
+        const fileSizeMB = file.size / (1024 * 1024);
+        if (fileSizeMB > MAX_SIZE_MB) {
+          return Swal.fire(
+            "Archivo muy pesado",
+            `El límite es de ${MAX_SIZE_MB}MB.`,
+            "error",
+          );
+        }
+
+        // --- VALIDACIÓN PREVIA (PRE-FLIGHT) ---
+        Swal.fire({
+          title: "Verificando estado...",
+          text: "Consultando base de datos...",
+          allowOutsideClick: false,
+          showConfirmButton: false,
+          didOpen: () => {
+            Swal.showLoading();
+          },
+        });
+
+        try {
+          const checkResponse = await fetch(WEB_APP_URL, {
+            method: "POST",
+            body: JSON.stringify({
+              action: "validarCargaFase3", // Nueva acción a manejar en Apps Script
+              data: { idPedido: idPedido },
+            }),
+          });
+          const checkResult = await checkResponse.json();
+
+          if (checkResult.status !== "success") {
+            // Error si ID no existe o si estado_fase3 ya tiene un valor
+            return Swal.fire(
+              "Validación fallida",
+              checkResult.message ||
+                "No se pudo validar el ID o ya subiste un documento para esta fase.",
+              "error",
+            );
+          }
+
+          // Si todo está correcto, procedemos con la subida
+          Swal.fire({
+            title: "Procesando Documento",
+            html: `
+            <p>Preparando datos...</p>
+            <div class="swal-progress-container">
+                <div id="progressBar" class="swal-progress-bar"></div>
+            </div>
+            <small id="progressText">0%</small>
+        `,
+            allowOutsideClick: false,
+            showConfirmButton: false,
+            didOpen: () => {
+              Swal.showLoading();
+              enviarArchivoFase3(idPedido, file);
+            },
+          });
+        } catch (err) {
+          Swal.fire(
+            "Error de Conexión",
+            "No se pudo verificar el estado en este momento.",
+            "error",
+          );
+        }
+      });
+
+      // --- 3. ENVÍO AL BACKEND (App Script) ---
+      async function enviarArchivoFase3(idPedido, file) {
+        const progressBar = document.getElementById("progressBar");
+        const progressText = document.getElementById("progressText");
+        const reader = new FileReader();
+
+        reader.onprogress = (e) => {
+          if (e.lengthComputable) {
+            const percent = Math.round((e.loaded / e.total) * 100);
+            if (progressBar) progressBar.style.width = percent + "%";
+            if (progressText) progressText.textContent = percent + "%";
+          }
+        };
+
+        reader.onload = async (event) => {
+          if (progressText)
+            progressText.textContent = "Enviando a IEmpresa...";
+
+          const base64Data = event.target.result.split(",")[1];
+
+          // Fíjate que cambiamos la acción a "subirFase3"
+          const payload = {
+            action: "subirFase3",
+            data: {
+              idPedido: idPedido,
+              fileName: file.name,
+              mimeType: file.type,
+              base64: base64Data,
+            },
+          };
+
+          try {
+            const response = await fetch(WEB_APP_URL, {
+              method: "POST",
+              body: JSON.stringify(payload),
+            });
+
+            const result = await response.json();
+
+            if (result.status === "success") {
+              Swal.fire(
+                "¡Recepción Exitosa!",
+                "El prototipo se ha subido correctamente.",
+                "success",
+              );
+              document.getElementById("uploadForm").reset();
+              fileInfo.textContent = "Ningún archivo seleccionado";
+            } else {
+              throw new Error(result.message);
+            }
+          } catch (err) {
+            Swal.fire(
+              "Error",
+              err.message || "No se pudo conectar con el servidor.",
+              "error",
+            );
+          }
+        };
+
+        reader.onerror = () =>
+          Swal.fire("Error", "No se pudo leer el archivo.", "error");
+        reader.readAsDataURL(file);
+      }
+    </script>
+  </body>
+</html>

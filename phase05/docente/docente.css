@@ -1,0 +1,502 @@
+/* --- START OF FILE docente.css --- */
+body,
+html {
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+  background-color: #f8f9fa;
+}
+
+.navbar-custom {
+  height: 56px;
+  background: var(--ie-azul-empresa);
+}
+
+.main-container {
+  display: flex;
+  height: calc(100vh - 56px);
+}
+
+/* Panel Lateral (Lista de Estudiantes) */
+.sidebar {
+  width: 320px;
+  min-width: 320px; /* Evita que el ancho sea menor a 320px */
+  flex-shrink: 0; /* Fuerza a flexbox a no encoger este panel */
+  background-color: var(--ie-blanco);
+  border-right: 1px solid #dee2e6;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.student-item {
+  cursor: pointer;
+  padding: 18px 15px; /* Un poco más de aire */
+  border-bottom: 1px solid #eef2f7;
+  transition: all 0.2s ease-in-out;
+  border-left: 4px solid transparent;
+}
+
+.student-item:hover {
+  background-color: var(--ie-gris-niebla);
+}
+
+.student-item.active {
+  background-color: #e6f0f9; /* Azul muy tenue para contraste */
+  border-left: 5px solid var(--ie-naranja-instituto); /* Naranja Instituto */
+  box-shadow: inset 0 0 10px rgba(0, 45, 86, 0.05);
+}
+
+.student-item.active .fw-bold {
+  color: var(--ie-azul-empresa) !important;
+}
+
+.student-item .badge {
+  letter-spacing: 0.3px;
+  padding: 5px 10px;
+  border-radius: 50px; /* Badges tipo cápsula */
+}
+
+/* Contenido Principal (Video y Evaluación) */
+.content-area {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  background-color: #e9ecef;
+}
+
+.video-container {
+  position: relative;
+  padding-bottom: 30%; /* Reducido para ocupar menos espacio */
+  height: 0;
+  background: #000;
+  flex-shrink: 0;
+}
+
+.video-container iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.evaluation-panel {
+  flex-grow: 1;
+  background: var(--ie-blanco);
+  padding: 20px;
+  box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.05);
+  overflow-y: auto;
+}
+
+.pregunta-box {
+  background: #fdfdfe;
+  border-left: 3px solid var(--ie-naranja-instituto); 
+  padding: 12px;
+  margin-bottom: 12px;
+  border-radius: 6px;
+  font-size: 0.92rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+}
+
+.text-primary {
+  color: var(--ie-naranja-instituto) !important; /* Violeta Real */
+}
+
+.btn-info {
+  background-color: var(--ie-naranja-instituto) !important; /* CTA Principal */
+  border-color: var(--ie-naranja-instituto) !important;
+  color: var(--ie-blanco) !important;
+}
+
+.btn-info:hover {
+   background-color: var(--ie-naranja-energia) !important; /* Hover dinámico */
+  border-color: var(--ie-naranja-energia) !important;
+}
+
+/* Empty State */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: #6c757d;
+  text-align: center;
+  padding: 20px;
+}
+
+/* ==========================================================================
+   PORTAL DOCENTE - INTEGRACIÓN DE SISTEMA DE LOGIN & SPLASH SCREEN
+   ========================================================================== */
+
+:root {
+  /* 1. Colores Principales (Marca IEmpresa) */
+  --ie-naranja-instituto: #f15a24;
+  --ie-azul-empresa: #002d56;
+  --ie-naranja-energia: #ff8200;
+
+  /* 2. Colores de Apoyo y Contraste */
+  --ie-blanco: #ffffff;
+  --ie-gris-niebla: #f4f4f4;
+  --ie-azul-prestigio: #0a1f44;
+
+  /* Variables del Sistema Mapeadas a la Paleta */
+  --bgu-primary-blue: var(--ie-azul-empresa);
+  --bgu-deep-blue: var(--ie-azul-prestigio);
+  --bgu-accent-blue: var(--ie-naranja-instituto);
+  --bgu-white: var(--ie-blanco);
+  --bgu-light-gray: var(--ie-gris-niebla);
+  --bgu-celeste: var(--ie-naranja-energia);
+  --bg-dark-navy: var(--ie-azul-prestigio);
+  --bg-card-dark: #1e0035; /* Tono oscuro profundo derivado de medianoche */
+  --text-primary: var(--ie-azul-prestigio);
+  --text-secondary: #334155;
+  --text-muted: #64748b;
+  --text-light: #b4a4ca; /* Gris claro con tinte lavanda */
+  --border-light: #e2e8f0;
+  --bg-card: var(--ie-blanco);
+
+  /* Colores de las Fases (Splash Orbs) */
+  --color-f1: var(--ie-azul-prestigio);
+  --color-f2: var(--ie-azul-empresa);
+  --color-f3: #0056b3; 
+  --color-f4: var(--ie-naranja-energia);
+  --color-f5: var(--ie-naranja-instituto);
+  --color-f6: #bf360c;
+
+  /* Sombras calculadas utilizando Púrpura Medianoche (rgba de #2E004F -> 46, 0, 79) */
+  --shadow-sm: 0 1px 2px 0 rgba(10, 31, 68, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(10, 31, 68, 0.05), 0 2px 4px -2px rgba(10, 31, 68, 0.05);
+  --shadow-lg: 0 10px 15px -3px rgba(10, 31, 68, 0.06), 0 4px 6px -4px rgba(10, 31, 68, 0.04);
+  --shadow-premium: 0 20px 25px -5px rgba(10, 31, 68, 0.08), 0 8px 10px -6px rgba(10, 31, 68, 0.06);
+}
+
+/* Splash Screen Setup */
+#splash-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: radial-gradient(
+    circle at center,
+    var(--ie-azul-empresa) 0%,
+    var(--ie-azul-prestigio) 100%
+  );
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  overflow: hidden;
+}
+
+#splash-screen::before {
+  content: "";
+  position: absolute;
+  width: 150%;
+  height: 150%;
+  background-image: radial-gradient(rgba(241, 90, 36, 0.1) 1px, transparent 0);
+  background-size: 24px 24px;
+  transform: rotate(15deg);
+  opacity: 0.5;
+  z-index: 1;
+}
+
+.splash-content {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 500px;
+  padding: 40px;
+}
+
+.orbs-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 35px;
+  width: 100%;
+}
+
+.orb {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  animation: bounce 1.4s infinite ease-in-out both;
+  position: relative;
+  border: 2px solid rgba(255, 255, 255, 0.8) !important;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+}
+
+.orb::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: inherit;
+  filter: blur(8px);
+  opacity: 0.6;
+}
+
+.orb-f1 {
+  background-color: var(--color-f1);
+  animation-delay: -0.5s;
+}
+.orb-f2 {
+  background-color: var(--color-f2);
+  animation-delay: -0.4s;
+}
+.orb-f3 {
+  background-color: var(--color-f3);
+  animation-delay: -0.3s;
+}
+.orb-f4 {
+  background-color: var(--color-f4);
+  animation-delay: -0.2s;
+}
+.orb-f5 {
+  background-color: var(--color-f5);
+  animation-delay: -0.1s;
+}
+.orb-f6 {
+  background-color: var(--color-f6);
+  animation-delay: 0s;
+}
+
+.orb-f5,
+.orb-f6 {
+  border: 2px solid rgba(255, 255, 255, 0.9);
+  filter: brightness(1.2);
+}
+
+.splash-title {
+  color: var(--ie-blanco);
+  font-weight: 800;
+  letter-spacing: 6px;
+  font-size: 28px;
+  margin-bottom: 8px;
+  text-shadow: 0 0 30px rgba(241, 90, 36, 0.3);
+  font-family: "Outfit", sans-serif;
+}
+
+.splash-subtitle {
+  color: #cbd5e1;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-weight: 500;
+}
+
+/* Progress Capsule */
+.progress-frame {
+  width: 100%;
+  max-width: 650px;
+  margin: 0 auto;
+  padding: 4px;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 50px;
+  box-shadow:
+    0 0 20px rgba(0, 0, 0, 0.4),
+    inset 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.progress-container {
+  width: 100%;
+  height: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 50px;
+  overflow: hidden;
+  position: relative;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(
+    90deg,
+    var(--ie-naranja-instituto) 0%,
+    var(--ie-naranja-energia) 100%
+  );
+  background-size: 200% 100%;
+  border-radius: 50px;
+  transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 0 15px rgba(241, 90, 36, 0.5);
+  animation: shimmer 2s infinite linear;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 200% 50%;
+  }
+}
+
+@keyframes bounce {
+  0%,
+  80%,
+  100% {
+    transform: translateY(0) scale(0.6);
+    opacity: 0.4;
+  }
+  40% {
+    transform: translateY(-20px) scale(1.1);
+    opacity: 1;
+  }
+}
+
+/* High-Tech Login Card styling */
+.login-bg {
+  background: radial-gradient(
+    circle at 10% 20%,
+    #ffffff 0%,
+    #e6e9ef 100%
+  );
+  position: relative;
+  overflow: hidden;
+}
+
+.login-bg::before {
+  content: "";
+  position: absolute;
+  top: -20%;
+  right: -20%;
+  width: 60%;
+  height: 60%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(241, 90, 36, 0.1) 0%, transparent 70%);
+  filter: blur(40px);
+}
+
+.login-bg::after {
+  content: "";
+  position: absolute;
+  bottom: -20%;
+  left: -20%;
+  width: 70%;
+  height: 70%;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(46, 0, 79, 0.1) 0%,
+    transparent 60%
+  ); /* Resplandor Púrpura Medianoche */
+  filter: blur(45px);
+}
+
+.login-card {
+  backdrop-filter: blur(20px);
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(0, 45, 86, 0.1) !important;
+  box-shadow: 0 30px 60px -15px rgba(10, 31, 68, 0.2) !important;
+  z-index: 10;
+  border-radius: 20px;
+}
+
+.login-icon-wrapper {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto;
+  background: linear-gradient(135deg, var(--ie-azul-empresa), var(--ie-azul-prestigio));
+  color: var(--bgu-white);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  box-shadow: 0 10px 20px rgba(0, 45, 86, 0.2);
+}
+
+.form-floating > .form-control:focus ~ label,
+.form-floating > .form-control:not(:placeholder-shown) ~ label {
+  color: var(--ie-azul-empresa);
+  font-weight: 600;
+}
+
+.form-floating > .form-control {
+  border-radius: 12px;
+  border: 1.5px solid var(--border-light);
+  padding-left: 15px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.form-floating > .form-control:focus {
+  border-color: var(--ie-naranja-instituto);
+  box-shadow: 0 0 0 4px rgba(241, 90, 36, 0.1);
+}
+
+.login-btn {
+  background: linear-gradient(
+    135deg,
+    var(--ie-naranja-instituto) 0%,
+    var(--ie-naranja-energia) 100%
+  ) !important;
+  border: none !important;
+  border-radius: 12px !important;
+  font-size: 0.95rem !important;
+  letter-spacing: 0.5px;
+  box-shadow: 0 8px 20px rgba(241, 90, 36, 0.3) !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  color: var(--bgu-white) !important;
+}
+
+.login-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 24px rgba(241, 90, 36, 0.4) !important;
+  filter: brightness(1.1);
+}
+
+/* Estilos para el filtro de registros */
+.btn-filtro {
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  border-radius: 6px;
+  padding: 6px 4px;
+}
+
+.btn-filtro[data-filtro="todos"] {
+  color: var(--ie-azul-empresa);
+  border-color: var(--ie-azul-empresa);
+}
+.btn-filtro[data-filtro="todos"].active,
+.btn-filtro[data-filtro="todos"]:hover {
+  background-color: var(--ie-azul-empresa);
+  color: #ffffff;
+}
+
+.btn-filtro[data-filtro="pendiente"] {
+  color: #856404;
+  border-color: #ffc107;
+}
+.btn-filtro[data-filtro="pendiente"].active,
+.btn-filtro[data-filtro="pendiente"]:hover {
+  background-color: #ffc107;
+  color: #212529;
+}
+
+.btn-filtro[data-filtro="calificado"] {
+  color: #155724;
+  border-color: #28a745;
+}
+.btn-filtro[data-filtro="calificado"].active,
+.btn-filtro[data-filtro="calificado"]:hover {
+  background-color: #28a745;
+  color: #ffffff;
+}

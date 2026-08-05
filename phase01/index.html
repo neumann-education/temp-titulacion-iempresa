@@ -1,0 +1,577 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="../img/logo_iempresa.png" type="image/png" />
+    <title>Módulo de Registro y Estructuración (Fase 01)</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css"
+      rel="stylesheet"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Inter:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="../styles.css" />
+  </head>
+  <body>
+    <div class="main-container">
+      <div class="image-panel"></div>
+      <div class="form-panel">
+        <div class="form-header">
+          <h1>Registro IEmpresa Titulación</h1>
+          <p>
+            Completa la información de tu equipo y selecciona el tema de
+            investigación para redactar la Estructura de Investigación.
+          </p>
+        </div>
+
+        <div class="progress-bar">
+          <div class="progress-line" id="line"></div>
+          <div class="progress-step active" data-title="Integrantes">1</div>
+          <div class="progress-step" data-title="Programa">2</div>
+          <div class="progress-step" data-title="Tema">3</div>
+          <div class="progress-step" data-title="Finalizar">4</div>
+        </div>
+
+        <form id="capstoneForm">
+          <!-- PASO 1: INTEGRANTES E ID -->
+          <div class="form-step active" id="step0">
+            <h2
+              class="field-label"
+              style="font-size: 1.2rem; margin-bottom: 1.5rem"
+            >
+              <i class="fa-solid fa-id-card"></i> Paso 1: Identificación y
+              Equipo
+            </h2>
+
+            <!-- CAMPO ID DE EQUIPO (MODIFICADO) -->
+            <div class="field-group">
+              <label class="field-label">ID de Equipo (Opcional)</label>
+              <div style="display: flex; gap: 8px">
+                <input
+                  type="text"
+                  name="id_pedido"
+                  id="id_pedido"
+                  placeholder="Ej: IE-18169..."
+                  style="flex: 1"
+                />
+                <button
+                  type="button"
+                  id="btnValidarId"
+                  class="nav-btn btn-next"
+                  style="
+                    display: none;
+                    padding: 0.8rem 1.2rem;
+                    font-size: 0.9rem;
+                    margin-top: 0;
+                    white-space: nowrap;
+                    flex-shrink: 0;
+                  "
+                >
+                  <i class="fa-solid fa-magnifying-glass"></i> Validar ID
+                </button>
+              </div>
+              <small
+                style="
+                  color: #667;
+                  font-size: 0.75rem;
+                  display: block;
+                  margin-top: 4px;
+                "
+              >
+                Déjalo en blanco si no tienes un ID o si eres un equipo nuevo.
+              </small>
+            </div>
+
+            <div class="field-group">
+              <label class="field-label"
+                >Nombre Integrante 1 <span class="required-star">*</span></label
+              >
+              <input
+                type="text"
+                name="nombre1"
+                id="nombre1"
+                placeholder="Nombre completo"
+                required
+              />
+            </div>
+
+            <div class="field-group">
+              <label class="field-label">Nombre Integrante 2</label>
+              <input
+                type="text"
+                name="nombre2"
+                id="nombre2"
+                placeholder="Nombre completo (opcional)"
+              />
+            </div>
+
+            <div class="field-group">
+              <label class="field-label"
+                >Correo Institucional (Principal)
+                <span class="required-star">*</span></label
+              >
+              <input
+                type="email"
+                name="correo"
+                id="correo"
+                placeholder="ejemplo@neumann.global"
+                required
+              />
+            </div>
+
+            <div class="field-group">
+              <label class="field-label"
+                >Correo Institucional (Integrante 2)</label
+              >
+              <input
+                type="email"
+                name="correo_1"
+                id="correo_1"
+                placeholder="ejemplo2@neumann.global (opcional)"
+              />
+            </div>
+          </div>
+
+          <!-- PASO 2: PROGRAMA -->
+          <div class="form-step" id="step1">
+            <h2
+              class="field-label"
+              style="font-size: 1.2rem; margin-bottom: 1.5rem"
+            >
+              <i class="fa-solid fa-graduation-cap"></i> Paso 2: Programa de
+              Estudios
+            </h2>
+            <div class="field-group">
+              <label class="field-label">
+                Selecciona tu programa <span class="required-star">*</span>
+              </label>
+
+              <!-- Contenedor de programas actualizado con Carreras Técnicas -->
+              <div
+                id="programasContainer"
+                style="display: flex; flex-direction: column; gap: 0.5rem"
+              >
+                <label class="theme-option">
+                  <input
+                    type="radio"
+                    name="programa"
+                    value="Contabilidad"
+                    onclick="cambiarTemas()"
+                    required
+                  />
+                  <span>Contabilidad</span>
+                </label>
+                <label class="theme-option">
+                  <input
+                    type="radio"
+                    name="programa"
+                    value="Administración de Negocios Internacionales"
+                    onclick="cambiarTemas()"
+                  />
+                  <span>Administración de Negocios Internacionales</span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- PASO 3: TEMA -->
+          <div class="form-step" id="step2">
+            <h2
+              class="field-label"
+              style="font-size: 1.2rem; margin-bottom: 1.5rem"
+            >
+              <i class="fa-solid fa-book"></i> Paso 3: Selección de Tema
+            </h2>
+            <p
+              class="field-label"
+              style="font-weight: 400; margin-bottom: 1rem"
+            >
+              Basado en tu programa, elige una de las siguientes propuestas:
+            </p>
+            <div id="temasContainer"></div>
+          </div>
+
+          <!-- PASO 4: PROCESAMIENTO -->
+          <div class="form-step" id="step3">
+            <div
+              class="loader-container"
+              id="finalLoader"
+              style="display: block"
+            >
+              <i
+                class="fa-solid fa-paper-plane fa-3x"
+                style="color: var(--primary-blue); margin-bottom: 1rem"
+              ></i>
+              <h3 id="statusText">Enviar Solicitud</h3>
+              <p id="subStatus">
+                Haz clic en el botón "FINALIZAR" para enviar la solicitud.
+              </p>
+              <div class="progress-custom">
+                <div class="progress-fill" id="finalBar"></div>
+              </div>
+            </div>
+
+            <div
+              id="resultCard"
+              style="display: none; text-align: center"
+            ></div>
+          </div>
+
+          <div class="navigation-buttons">
+            <button
+              type="button"
+              class="nav-btn btn-prev"
+              id="prevBtn"
+              disabled
+            >
+              Anterior
+            </button>
+            <button type="button" class="nav-btn btn-next" id="nextBtn">
+              Siguiente
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script src="config.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+      const WEB_APP_URL =
+        "https://script.google.com/macros/s/AKfycbwMNTyzrulP88Riq_v2QTtJbcLIBfgS1U2jvV9GSbl_UswHqY9kX4TW02LZifkrq3VE/exec";
+      let currentStep = 0;
+
+      const totalSteps = 4;
+      const form = document.getElementById("capstoneForm");
+      const nextBtn = document.getElementById("nextBtn");
+      const prevBtn = document.getElementById("prevBtn");
+      const steps = document.querySelectorAll(".form-step");
+      const circles = document.querySelectorAll(".progress-step");
+      const line = document.getElementById("line");
+      const idPedidoInput = document.getElementById("id_pedido");
+      const btnValidarId = document.getElementById("btnValidarId");
+
+      function updateUI() {
+        steps.forEach((step, idx) => {
+          step.classList.toggle("active", idx === currentStep);
+        });
+
+        circles.forEach((circle, idx) => {
+          circle.classList.toggle("active", idx <= currentStep);
+        });
+
+        const width = (currentStep / (totalSteps - 1)) * 100;
+        line.style.width = width + "%";
+
+        prevBtn.disabled = currentStep === 0;
+
+        if (currentStep === totalSteps - 1) {
+          nextBtn.innerHTML = "FINALIZAR";
+        } else {
+          nextBtn.innerHTML = "Siguiente";
+        }
+
+        // CORRECCIÓN BUG BOTONES: Solo ocultar si el resultado de éxito es visible
+        const isSuccess =
+          document.getElementById("resultCard").style.display === "block";
+        nextBtn.style.display = isSuccess ? "none" : "block";
+        prevBtn.style.display = isSuccess ? "none" : "block";
+
+        // CORRECCIÓN BUG TEMAS: Forzar carga al llegar al paso de temas
+        if (currentStep === 2) {
+          cambiarTemas();
+        }
+      }
+
+      function validate() {
+        if (currentStep === 0) {
+          const n1 = document.getElementById("nombre1").value.trim();
+          const email = document.getElementById("correo").value.trim();
+
+          if (!n1 || !email) {
+            Swal.fire(
+              "Error",
+              "Nombre 1 y Correo Principal son obligatorios",
+              "error",
+            );
+            return false;
+          }
+          if (!email.includes("@")) {
+            Swal.fire(
+              "Error",
+              "Ingrese un correo institucional válido",
+              "error",
+            );
+            return false;
+          }
+        }
+
+        if (currentStep === 1) {
+          // CAMBIO: Ahora validamos que un radio de "programa" esté marcado
+          const programaSeleccionado = document.querySelector(
+            'input[name="programa"]:checked',
+          );
+          if (!programaSeleccionado) {
+            Swal.fire(
+              "Atención",
+              "Selecciona un programa de estudios",
+              "warning",
+            );
+            return false;
+          }
+        }
+
+        if (currentStep === 2) {
+          if (!document.querySelector('input[name="tema"]:checked')) {
+            Swal.fire(
+              "Atención",
+              "Debes elegir un tema de la lista",
+              "warning",
+            );
+            return false;
+          }
+        }
+        return true;
+      }
+
+      function cambiarTemas() {
+        const programaRadio = document.querySelector(
+          'input[name="programa"]:checked',
+        );
+        if (!programaRadio) return;
+
+        const prog = programaRadio.value;
+        const container = document.getElementById("temasContainer");
+        container.innerHTML = "";
+
+        const listaTemas = CONFIG.TEMAS[prog] || [];
+
+        listaTemas.forEach((t, i) => {
+          const label = document.createElement("label");
+          label.className = "theme-option";
+
+          label.innerHTML = `
+          <input type="radio" id="tema${i}" name="tema" value="${t}" ${i === 0 ? "checked" : ""}> 
+          <span style="font-weight: 500; color: #333; line-height: 1.4;">${t}</span>
+        `;
+          container.appendChild(label);
+        });
+      }
+
+      nextBtn.addEventListener("click", () => {
+        if (validate()) {
+          if (currentStep < totalSteps - 1) {
+            currentStep++;
+            updateUI();
+          } else {
+            submitForm();
+          }
+        }
+      });
+
+      prevBtn.addEventListener("click", () => {
+        if (currentStep > 0) {
+          currentStep--;
+          updateUI();
+        }
+      });
+
+      idPedidoInput.addEventListener("input", () => {
+        if (idPedidoInput.value.trim() !== "") {
+          btnValidarId.style.display = "block";
+        } else {
+          btnValidarId.style.display = "none";
+        }
+      });
+
+      btnValidarId.addEventListener("click", async () => {
+        const idEquipo = idPedidoInput.value.trim();
+        if (!idEquipo) return;
+
+        Swal.fire({
+          title: "Validando ID...",
+          text: "Buscando la información de tu equipo.",
+          allowOutsideClick: false,
+          didOpen: () => {
+            Swal.showLoading();
+          },
+        });
+
+        try {
+          const response = await fetch(WEB_APP_URL, {
+            method: "POST",
+            body: JSON.stringify({
+              action: "validarExistenciaId",
+              data: { idPedido: idEquipo },
+            }),
+          });
+
+          const result = await response.json();
+
+          if (result.status === "success") {
+            // Se extrae la información con soporte para distintos formatos posibles del backend
+            const data =
+              result.data || result.registro || result.equipo || result;
+
+            const nombre1 = data.nombre1 || data.nombre_1 || data.nombre || "";
+            const nombre2 = data.nombre2 || data.nombre_2 || "";
+            const correo =
+              data.correo || data.correo_principal || data.email || "";
+            const correo_1 =
+              data.correo_1 || data.correo_secundario || data.correo2 || "";
+
+            // Rellenar los campos correspondientes
+            document.getElementById("nombre1").value = nombre1;
+            document.getElementById("nombre2").value = nombre2;
+            document.getElementById("correo").value = correo;
+            document.getElementById("correo_1").value = correo_1;
+
+            Swal.fire({
+              title: "¡ID Validado!",
+              html: `Se han cargado los datos de tu equipo.<br><br><b>Nota:</b> Si lo deseas, puedes editar o actualizar cualquiera de estos campos (modificar nombres, integrantes o corregir correos) antes de continuar con el registro.`,
+              icon: "success",
+              confirmButtonText: "Entendido",
+              confirmButtonColor: "var(--primary-ie)",
+            });
+          } else {
+            throw new Error(result.message || "El ID ingresado no existe.");
+          }
+        } catch (err) {
+          Swal.fire({
+            title: "Atención",
+            text:
+              err.message ||
+              "No se pudo validar el ID de equipo. Verifica que esté bien escrito.",
+            icon: "warning",
+            confirmButtonColor: "var(--primary-ie)",
+          });
+        }
+      });
+
+      async function submitForm() {
+        const statusText = document.getElementById("statusText");
+        const finalBar = document.getElementById("finalBar");
+        const idEquipo = document.getElementById("id_pedido").value.trim();
+        const emailPrincipal = document.getElementById("correo").value.trim();
+
+        nextBtn.disabled = true;
+        prevBtn.disabled = true;
+        finalBar.style.width = "10%";
+
+        try {
+          // 1. SIEMPRE VALIDAR DUPLICIDAD DE CORREO (Enviando el ID de equipo para evitar autobloqueo)
+          statusText.innerText = "Validando correo...";
+          const checkEmail = await fetch(WEB_APP_URL, {
+            method: "POST",
+            body: JSON.stringify({
+              action: "validarCorreoFase1",
+              data: {
+                correo: emailPrincipal,
+                idPedido: idEquipo, // <-- Se añade esta propiedad para la exención del duplicado
+              },
+            }),
+          });
+          const emailResult = await checkEmail.json();
+          if (emailResult.status === "error")
+            throw new Error(emailResult.message);
+
+          let actionToTake = "editar";
+          let payloadData = {};
+
+          const formData = new FormData(form);
+          const userParams = Object.fromEntries(formData.entries());
+
+          // 2. DECIDIR SI ES EDICIÓN O CREACIÓN NUEVA
+          if (idEquipo !== "") {
+            // Caso: El usuario ingresó un ID, verificamos si existe
+            statusText.innerText = "Validando ID de Equipo...";
+            finalBar.style.width = "30%";
+
+            const checkId = await fetch(WEB_APP_URL, {
+              method: "POST",
+              body: JSON.stringify({
+                action: "validarExistenciaId",
+                data: { idPedido: idEquipo },
+              }),
+            });
+            const idResult = await checkId.json();
+
+            if (idResult.status === "error") {
+              throw new Error(
+                "El ID ingresado no existe. Si no tienes uno, deja el campo vacío.",
+              );
+            }
+
+            actionToTake = "editar";
+            payloadData = {
+              id: idEquipo,
+              valores: { ...userParams, estado: "PENDIENTE" },
+            };
+          } else {
+            // Caso: Campo ID vacío, es un registro nuevo desde Fase 01
+            statusText.innerText = "Creando nuevo expediente...";
+            actionToTake = "crearDesdeFase01";
+            payloadData = { ...userParams };
+          }
+
+          // 3. ENVIAR AL SERVIDOR
+          finalBar.style.width = "70%";
+          const response = await fetch(WEB_APP_URL, {
+            method: "POST",
+            body: JSON.stringify({ action: actionToTake, data: payloadData }),
+          });
+
+          const result = await response.json();
+          if (result.status === "success") {
+            finalBar.style.width = "100%";
+            document.getElementById("finalLoader").style.display = "none";
+            document.getElementById("resultCard").style.display = "block";
+            document.getElementById("resultCard").innerHTML = `
+        <div style="padding: 2rem;">
+          <i class="fa-solid fa-circle-check fa-4x" style="color: #22c55e; margin-bottom: 1rem;"></i>
+          <h2 style="color: var(--dark-ie);">¡Registro Exitoso!</h2>
+          <button onclick="location.reload()" class="nav-btn btn-next" style="margin-top: 1.5rem; float: none;">Llenar otro</button>
+        </div>
+      `;
+            updateUI();
+            Swal.fire(
+              "¡Todo listo!",
+              "Registro procesado correctamente.",
+              "success",
+            );
+          } else {
+            throw new Error(result.message);
+          }
+        } catch (err) {
+          finalBar.style.width = "0%";
+          statusText.innerText = "Error detectado";
+          nextBtn.disabled = false;
+          prevBtn.disabled = false;
+          Swal.fire("Atención", err.message, "error");
+        }
+      }
+
+      window.addEventListener("DOMContentLoaded", () => {
+        // Limpia parámetros de la URL si existen para evitar conflictos al recargar
+        if (window.location.search) {
+          const cleanUrl =
+            window.location.protocol +
+            "//" +
+            window.location.host +
+            window.location.pathname;
+          window.history.replaceState({ path: cleanUrl }, "", cleanUrl);
+        }
+        cambiarTemas(); // Intento inicial de carga
+      });
+    </script>
+  </body>
+</html>

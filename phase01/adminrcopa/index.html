@@ -1,0 +1,1351 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Centro de Control - IEmpresa Titulación</title>
+    <link rel="icon" href="../../img/logo_iempresa.png" type="image/png" />
+
+    <!-- Premium Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Stylesheets -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="admin.css" />
+    <script src="temas.js"></script>
+  </head>
+
+  <body>
+    <!-- SPLASH SCREEN ANIMADO -->
+    <div id="splash-screen" style="display: none">
+      <div class="splash-content">
+        <div class="orbs-container">
+          <div
+            class="orb orb-f1"
+            data-bs-toggle="tooltip"
+            title="Fase 1: Base"
+          ></div>
+          <div
+            class="orb orb-f2"
+            data-bs-toggle="tooltip"
+            title="Fase 2: Prototipo"
+          ></div>
+          <div
+            class="orb orb-f3"
+            data-bs-toggle="tooltip"
+            title="Fase 3: Dictamen"
+          ></div>
+          <div
+            class="orb orb-f4"
+            data-bs-toggle="tooltip"
+            title="Fase 4: Preguntas"
+          ></div>
+          <div
+            class="orb orb-f5"
+            data-bs-toggle="tooltip"
+            title="Fase 4.1: Video"
+          ></div>
+          <div
+            class="orb orb-f6"
+            data-bs-toggle="tooltip"
+            title="Fase 4.2: Final"
+          ></div>
+        </div>
+        <h2 class="splash-title">IEMPRESA ENGINE</h2>
+        <p class="splash-subtitle" id="splash-text">
+          Estableciendo enlace seguro...
+        </p>
+        <div class="progress-frame mt-4">
+          <div class="progress-container">
+            <div
+              class="progress-bar-fill"
+              id="splash-progress"
+              style="width: 0%"
+            ></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PANTALLA DE LOGIN HIGH-TECH -->
+    <div
+      id="login-container"
+      class="d-flex align-items-center justify-content-center min-vh-100 login-bg"
+    >
+      <div
+        class="card p-5 border-0 login-card"
+        style="width: 100%; max-width: 440px"
+      >
+        <div class="text-center mb-4">
+          <div class="login-icon-wrapper mb-3">
+            <i class="fas fa-shield-halved"></i>
+          </div>
+          <h3 class="fw-bold text-dark mb-1">Centro de Control</h3>
+          <p class="text-muted small">Acceso exclusivo IEmpresa Titulación</p>
+        </div>
+
+        <div class="mb-3 form-floating">
+          <input
+            type="text"
+            id="login_user"
+            class="form-control"
+            placeholder="Usuario"
+            autocomplete="off"
+          />
+          <label for="login_user"
+            ><i class="fas fa-user text-muted me-2"></i>Usuario</label
+          >
+        </div>
+        <div class="mb-4 form-floating">
+          <input
+            type="password"
+            id="login_pass"
+            class="form-control"
+            placeholder="Contraseña"
+          />
+          <label for="login_pass"
+            ><i class="fas fa-lock text-muted me-2"></i>Contraseña</label
+          >
+        </div>
+        <button
+          id="btn-login"
+          class="btn btn-dark w-100 fw-bold py-3 login-btn"
+          onclick="iniciarSesion()"
+        >
+          <span class="btn-text"
+            >Autenticar Acceso <i class="fas fa-arrow-right ms-2"></i
+          ></span>
+          <span
+            class="spinner-border spinner-border-sm d-none"
+            role="status"
+            aria-hidden="true"
+          ></span>
+        </button>
+      </div>
+    </div>
+
+    <!-- DASHBOARD PRINCIPAL -->
+    <div id="main-dashboard" style="display: none">
+      <nav
+        class="navbar navbar-expand-lg navbar-dark top-navbar mb-4 shadow-sm"
+      >
+        <div
+          class="container-fluid d-flex justify-content-between align-items-center"
+        >
+          <!-- Izquierda: Logo y Marca -->
+          <div class="navbar-brand-wrapper">
+            <a class="navbar-brand fw-bold d-flex align-items-center" href="#">
+              <img
+                src="../../img/iempresa_logo.jpg"
+                alt="Logo"
+                style="height: 32px; width: auto; margin-right: 12px"
+              />
+              <span>JOHN VON NEUMANN</span>&nbsp;| TITULACIÓN
+            </a>
+          </div>
+
+          <!-- Centro: Switch de Vista ESP (Centrado Absoluto) -->
+          <div class="navbar-center-actions">
+            <button
+              id="btn-toggle-esp-view"
+              class="btn btn-sm btn-outline-warning fw-bold px-5"
+              style="min-width: 350px; font-size: 0.9rem; letter-spacing: 0.5px"
+              onclick="toggleVistaESP()"
+            >
+              <i class="fas fa-file-signature me-2"></i> Cambiar a Vista ESP
+            </button>
+          </div>
+
+          <!-- Derecha: Botones de Acción -->
+          <div class="navbar-right-actions d-flex align-items-center gap-2">
+            <button
+              class="btn btn-sm btn-outline-light"
+              onclick="obtenerDatos(false, true)"
+            >
+              <i class="fas fa-sync-alt me-1"></i> Actualizar
+            </button>
+            <button
+              id="btn-toggle-vista"
+              class="btn btn-sm btn-outline-info fw-bold"
+              onclick="toggleVistaDefensa()"
+            >
+              <i class="fas fa-video me-1"></i> Vista Defensa de Notas
+            </button>
+            <button
+              class="btn btn-sm btn-outline-danger"
+              onclick="cerrarSesion()"
+            >
+              <i class="fas fa-sign-out-alt me-1"></i> Salir
+            </button>
+          </div>
+        </div>
+      </nav>
+
+      <main class="container-fluid px-4">
+        <!-- NUEVO: DASHBOARD DE DISTRIBUCIÓN POR FASE ACTIVA CON GRÁFICOS -->
+        <section class="mb-4" id="dashboard-fases-activas">
+          <div class="card border-0 shadow-sm p-4">
+            <h5
+              class="fw-bold mb-4 text-secondary d-flex align-items-center"
+              style="font-size: 1.1rem"
+            >
+              <i class="fas fa-chart-bar text-primary me-2"></i> Distribución de
+              Registros en Fase Activa
+            </h5>
+
+            <div class="row">
+              <!-- Gráfico de Barras Principal (Izquierda) -->
+              <div class="col-12 col-xl-4 mb-4 mb-xl-0">
+                <div
+                  class="p-3 bg-light rounded-4 border border-light h-100 d-flex flex-column"
+                  style="min-height: 280px"
+                >
+                  <h6
+                    class="fw-bold text-muted mb-3 small text-uppercase"
+                    style="letter-spacing: 0.5px"
+                  >
+                    Carga Visual por Fase
+                  </h6>
+                  <div
+                    class="flex-grow-1 position-relative"
+                    style="height: 220px"
+                  >
+                    <canvas id="chartFasesActivas"></canvas>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Detalle de Tarjetas de Fase con Mini-Barras (Derecha) -->
+              <div class="col-12 col-xl-8">
+                <div
+                  class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3 h-100"
+                >
+                  <!-- Fase 1 -->
+                  <div class="col">
+                    <div
+                      class="card h-100 border-0 shadow-sm phase-dist-card"
+                      style="border-top: 4px solid var(--color-f1) !important"
+                    >
+                      <div
+                        class="card-body p-3 text-center d-flex flex-column justify-content-between"
+                      >
+                        <div>
+                          <h6
+                            class="fw-bold mb-1"
+                            style="font-size: 0.8rem; color: var(--color-f1)"
+                          >
+                            FASE 1: BASE
+                          </h6>
+                          <div
+                            class="phase-dist-num"
+                            id="dist-f1-total"
+                            style="
+                              font-size: 1.8rem;
+                              font-weight: 800;
+                              color: var(--text-primary);
+                            "
+                          >
+                            0
+                          </div>
+                        </div>
+                        <!-- Mini Barra Horizontal de Estados -->
+                        <div
+                          class="progress my-2"
+                          style="
+                            height: 6px;
+                            background-color: #f1f5f9;
+                            border-radius: 10px;
+                          "
+                        >
+                          <div
+                            class="progress-bar bg-primary"
+                            id="dist-f1-bar-pend"
+                            style="width: 0%"
+                          ></div>
+                          <div
+                            class="progress-bar bg-warning"
+                            id="dist-f1-bar-comp"
+                            style="width: 0%"
+                          ></div>
+                          <div
+                            class="progress-bar bg-success"
+                            id="dist-f1-bar-env"
+                            style="width: 0%"
+                          ></div>
+                        </div>
+                        <div
+                          class="d-flex justify-content-around mt-1 pt-1 border-top text-muted"
+                          style="font-size: 0.72rem"
+                        >
+                          <div>
+                            <span
+                              class="d-block fw-bold text-primary"
+                              id="dist-f1-pend"
+                              >0</span
+                            >
+                            <span>Pendientes</span>
+                          </div>
+                          <div>
+                            <span
+                              class="d-block fw-bold text-warning"
+                              id="dist-f1-comp"
+                              >0</span
+                            >
+                            <span>Completados</span>
+                          </div>
+                          <div>
+                            <span
+                              class="d-block fw-bold text-success"
+                              id="dist-f1-env"
+                              >0</span
+                            >
+                            <span>Enviados</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Fase 2 -->
+                  <div class="col">
+                    <div
+                      class="card h-100 border-0 shadow-sm phase-dist-card"
+                      style="border-top: 4px solid var(--color-f2) !important"
+                    >
+                      <div
+                        class="card-body p-3 text-center d-flex flex-column justify-content-between"
+                      >
+                        <div>
+                          <h6
+                            class="fw-bold mb-1"
+                            style="font-size: 0.8rem; color: var(--color-f2)"
+                          >
+                            FASE 2: PROTOTIPO
+                          </h6>
+                          <div
+                            class="phase-dist-num"
+                            id="dist-f2-total"
+                            style="
+                              font-size: 1.8rem;
+                              font-weight: 800;
+                              color: var(--text-primary);
+                            "
+                          >
+                            0
+                          </div>
+                        </div>
+                        <div
+                          class="progress my-2"
+                          style="
+                            height: 6px;
+                            background-color: #f1f5f9;
+                            border-radius: 10px;
+                          "
+                        >
+                          <div
+                            class="progress-bar bg-primary"
+                            id="dist-f2-bar-pend"
+                            style="width: 0%"
+                          ></div>
+                          <div
+                            class="progress-bar bg-warning"
+                            id="dist-f2-bar-comp"
+                            style="width: 0%"
+                          ></div>
+                          <div
+                            class="progress-bar bg-success"
+                            id="dist-f2-bar-env"
+                            style="width: 0%"
+                          ></div>
+                        </div>
+                        <div
+                          class="d-flex justify-content-around mt-1 pt-1 border-top text-muted"
+                          style="font-size: 0.72rem"
+                        >
+                          <div>
+                            <span
+                              class="d-block fw-bold text-primary"
+                              id="dist-f2-pend"
+                              >0</span
+                            >
+                            <span>Pendientes</span>
+                          </div>
+                          <div>
+                            <span
+                              class="d-block fw-bold text-warning"
+                              id="dist-f2-comp"
+                              >0</span
+                            >
+                            <span>Completados</span>
+                          </div>
+                          <div>
+                            <span
+                              class="d-block fw-bold text-success"
+                              id="dist-f2-env"
+                              >0</span
+                            >
+                            <span>Enviados</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Fase 3 -->
+                  <div class="col">
+                    <div
+                      class="card h-100 border-0 shadow-sm phase-dist-card"
+                      style="border-top: 4px solid var(--color-f3) !important"
+                    >
+                      <div
+                        class="card-body p-3 text-center d-flex flex-column justify-content-between"
+                      >
+                        <div>
+                          <h6
+                            class="fw-bold mb-1"
+                            style="font-size: 0.8rem; color: var(--color-f3)"
+                          >
+                            FASE 3: DICTAMEN
+                          </h6>
+                          <div
+                            class="phase-dist-num"
+                            id="dist-f3-total"
+                            style="
+                              font-size: 1.8rem;
+                              font-weight: 800;
+                              color: var(--text-primary);
+                            "
+                          >
+                            0
+                          </div>
+                        </div>
+                        <div
+                          class="progress my-2"
+                          style="
+                            height: 6px;
+                            background-color: #f1f5f9;
+                            border-radius: 10px;
+                          "
+                        >
+                          <div
+                            class="progress-bar bg-primary"
+                            id="dist-f3-bar-pend"
+                            style="width: 0%"
+                          ></div>
+                          <div
+                            class="progress-bar bg-warning"
+                            id="dist-f3-bar-comp"
+                            style="width: 0%"
+                          ></div>
+                          <div
+                            class="progress-bar bg-success"
+                            id="dist-f3-bar-env"
+                            style="width: 0%"
+                          ></div>
+                        </div>
+                        <div
+                          class="d-flex justify-content-around mt-1 pt-1 border-top text-muted"
+                          style="font-size: 0.72rem"
+                        >
+                          <div>
+                            <span
+                              class="d-block fw-bold text-primary"
+                              id="dist-f3-pend"
+                              >0</span
+                            >
+                            <span>Pendientes</span>
+                          </div>
+                          <div>
+                            <span
+                              class="d-block fw-bold text-warning"
+                              id="dist-f3-comp"
+                              >0</span
+                            >
+                            <span>Completados</span>
+                          </div>
+                          <div>
+                            <span
+                              class="d-block fw-bold text-success"
+                              id="dist-f3-env"
+                              >0</span
+                            >
+                            <span>Enviados</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Fase 4 -->
+                  <div class="col">
+                    <div
+                      class="card h-100 border-0 shadow-sm phase-dist-card"
+                      style="border-top: 4px solid var(--color-f4) !important"
+                    >
+                      <div
+                        class="card-body p-3 text-center d-flex flex-column justify-content-between"
+                      >
+                        <div>
+                          <h6
+                            class="fw-bold mb-1"
+                            style="font-size: 0.8rem; color: var(--color-f4)"
+                          >
+                            FASE 4: PREGUNTAS
+                          </h6>
+                          <div
+                            class="phase-dist-num"
+                            id="dist-f4-total"
+                            style="
+                              font-size: 1.8rem;
+                              font-weight: 800;
+                              color: var(--text-primary);
+                            "
+                          >
+                            0
+                          </div>
+                        </div>
+                        <div
+                          class="progress my-2"
+                          style="
+                            height: 6px;
+                            background-color: #f1f5f9;
+                            border-radius: 10px;
+                          "
+                        >
+                          <div
+                            class="progress-bar bg-primary"
+                            id="dist-f4-bar-pend"
+                            style="width: 0%"
+                          ></div>
+                          <div
+                            class="progress-bar bg-warning"
+                            id="dist-f4-bar-comp"
+                            style="width: 0%"
+                          ></div>
+                          <div
+                            class="progress-bar bg-success"
+                            id="dist-f4-bar-env"
+                            style="width: 0%"
+                          ></div>
+                        </div>
+                        <div
+                          class="d-flex justify-content-around mt-1 pt-1 border-top text-muted"
+                          style="font-size: 0.72rem"
+                        >
+                          <div>
+                            <span
+                              class="d-block fw-bold text-primary"
+                              id="dist-f4-pend"
+                              >0</span
+                            >
+                            <span>Pendientes</span>
+                          </div>
+                          <div>
+                            <span
+                              class="d-block fw-bold text-warning"
+                              id="dist-f4-comp"
+                              >0</span
+                            >
+                            <span>Completados</span>
+                          </div>
+                          <div>
+                            <span
+                              class="d-block fw-bold text-success"
+                              id="dist-f4-env"
+                              >0</span
+                            >
+                            <span>Enviados</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Fase 5 -->
+                  <div class="col">
+                    <div
+                      class="card h-100 border-0 shadow-sm phase-dist-card"
+                      style="border-top: 4px solid var(--color-f5) !important"
+                    >
+                      <div
+                        class="card-body p-3 text-center d-flex flex-column justify-content-between"
+                      >
+                        <div>
+                          <h6
+                            class="fw-bold mb-1"
+                            style="font-size: 0.8rem; color: var(--color-f5)"
+                          >
+                            FASE 4.1: DEFENSA
+                          </h6>
+                          <div
+                            class="phase-dist-num"
+                            id="dist-f5-total"
+                            style="
+                              font-size: 1.8rem;
+                              font-weight: 800;
+                              color: var(--text-primary);
+                            "
+                          >
+                            0
+                          </div>
+                        </div>
+                        <div
+                          class="progress my-2"
+                          style="
+                            height: 6px;
+                            background-color: #f1f5f9;
+                            border-radius: 10px;
+                          "
+                        >
+                          <div
+                            class="progress-bar bg-primary"
+                            id="dist-f5-bar-esp"
+                            style="width: 0%"
+                          ></div>
+                          <div
+                            class="progress-bar bg-warning"
+                            id="dist-f5-bar-por"
+                            style="width: 0%"
+                          ></div>
+                          <div
+                            class="progress-bar bg-success"
+                            id="dist-f5-bar-cal"
+                            style="width: 0%"
+                          ></div>
+                        </div>
+                        <div
+                          class="d-flex justify-content-around mt-1 pt-1 border-top text-muted"
+                          style="font-size: 0.72rem"
+                        >
+                          <div>
+                            <span
+                              class="d-block fw-bold text-primary"
+                              id="dist-f5-esp"
+                              >0</span
+                            >
+                            <span>Esperando Video</span>
+                          </div>
+                          <div>
+                            <span
+                              class="d-block fw-bold text-warning"
+                              id="dist-f5-por"
+                              >0</span
+                            >
+                            <span>Por Calificar</span>
+                          </div>
+                          <div>
+                            <span
+                              class="d-block fw-bold text-success"
+                              id="dist-f5-cal"
+                              >0</span
+                            >
+                            <span>Calificados</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Fase 6 -->
+                  <div class="col">
+                    <div
+                      class="card h-100 border-0 shadow-sm phase-dist-card"
+                      style="border-top: 4px solid var(--color-f6) !important"
+                    >
+                      <div
+                        class="card-body p-3 text-center d-flex flex-column justify-content-between"
+                      >
+                        <div>
+                          <h6
+                            class="fw-bold mb-1"
+                            style="font-size: 0.8rem; color: var(--color-f6)"
+                          >
+                            FASE 4.2: CIERRE
+                          </h6>
+                          <div
+                            class="phase-dist-num"
+                            id="dist-f6-total"
+                            style="
+                              font-size: 1.8rem;
+                              font-weight: 800;
+                              color: var(--text-primary);
+                            "
+                          >
+                            0
+                          </div>
+                        </div>
+                        <div
+                          class="progress my-2"
+                          style="
+                            height: 6px;
+                            background-color: #f1f5f9;
+                            border-radius: 10px;
+                          "
+                        >
+                          <div
+                            class="progress-bar bg-warning"
+                            id="dist-f6-bar-comp"
+                            style="width: 0%"
+                          ></div>
+                          <div
+                            class="progress-bar bg-success"
+                            id="dist-f6-bar-env"
+                            style="width: 0%"
+                          ></div>
+                        </div>
+                        <div
+                          class="d-flex justify-content-around mt-1 pt-1 border-top text-muted"
+                          style="font-size: 0.72rem"
+                        >
+                          <div>
+                            <span
+                              class="d-block fw-bold text-warning"
+                              id="dist-f6-comp"
+                              >0</span
+                            >
+                            <span>Completados</span>
+                          </div>
+                          <div>
+                            <span
+                              class="d-block fw-bold text-success"
+                              id="dist-f6-env"
+                              >0</span
+                            >
+                            <span>Enviados</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Panel de Acciones (General) -->
+        <section class="row mb-4" id="panel-operaciones">
+          <div class="col-12">
+            <div class="card border-0 shadow-sm panel-acciones">
+              <div class="card-body">
+                <div
+                  class="d-flex justify-content-between align-items-center mb-3"
+                >
+                  <h5
+                    class="fw-bold mb-0 text-secondary d-flex align-items-center"
+                  >
+                    <i class="fas fa-bolt text-warning me-2"></i> Centro de
+                    Operaciones
+                  </h5>
+                  <!-- FILA 1: Botones de Herramientas y Filtros -->
+                  <div class="d-flex gap-2">
+                    <button
+                      id="btn-toggle-no-aptos"
+                      class="btn btn-outline-danger fw-bold shadow-sm"
+                      style="
+                        font-size: 0.85rem;
+                        padding: 8px 18px;
+                        border-radius: 10px;
+                      "
+                      onclick="toggleNoAptos()"
+                    >
+                      <i class="fas fa-eye-slash me-1"></i> Mostrar NO APTOS
+                    </button>
+
+                    <button
+                      class="btn btn-light border fw-bold text-danger shadow-sm"
+                      style="
+                        font-size: 0.85rem;
+                        padding: 8px 18px;
+                        border-radius: 10px;
+                      "
+                      onclick="forzarRedaccionAsync()"
+                    >
+                      <i class="fas fa-robot me-1"></i> Forzar Redacción (Test)
+                    </button>
+                  </div>
+                </div>
+
+                <!-- FILA 2: Botones de Envío Masivo -->
+                <div
+                  class="d-flex flex-wrap gap-2 justify-content-end border-top pt-3"
+                >
+                  <button
+                    class="btn btn-action-f0 fw-bold shadow-sm"
+                    onclick="enviarTodosFase0()"
+                  >
+                    <i class="fas fa-paper-plane me-1"></i> Enviar en Masa (F0)
+                  </button>
+                  <button
+                    class="btn btn-action-f1 text-white fw-bold shadow-sm"
+                    onclick="enviarTodosFase1()"
+                  >
+                    <i class="fas fa-paper-plane me-1"></i> Enviar en Masa (F1)
+                  </button>
+                  <button
+                    class="btn btn-action-f2 text-white fw-bold shadow-sm"
+                    onclick="enviarTodosFase2()"
+                  >
+                    <i class="fas fa-paper-plane me-1"></i> Enviar en Masa (F2)
+                  </button>
+                  <button
+                    class="btn btn-action-f3 text-white fw-bold shadow-sm"
+                    onclick="enviarTodosFase3()"
+                  >
+                    <i class="fas fa-paper-plane me-1"></i> Enviar en Masa (F3)
+                  </button>
+                  <button
+                    class="btn btn-action-f4 text-white fw-bold shadow-sm"
+                    onclick="enviarTodosFase4()"
+                  >
+                    <i class="fas fa-paper-plane me-1"></i> Enviar en Masa (F4)
+                  </button>
+                  <button
+                    class="btn btn-action-f6 text-white fw-bold shadow-sm"
+                    onclick="enviarTodosFase6()"
+                  >
+                    <i class="fas fa-paper-plane me-1"></i> Enviar en Masa
+                    (F4.2)
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Panel de Acciones para Fase de Defensa -->
+        <section
+          class="row mb-4"
+          id="panel-operaciones-defensa"
+          style="display: none"
+        >
+          <div class="col-12">
+            <div class="card border-0 shadow-sm">
+              <div
+                class="card-body d-flex justify-content-between align-items-center flex-wrap gap-3"
+              >
+                <h5
+                  class="fw-bold mb-0 text-secondary d-flex align-items-center"
+                >
+                  <i class="fas fa-gavel text-primary me-2"></i> Calificaciones
+                  y Control de Defensa
+                </h5>
+                <div class="d-flex flex-wrap gap-2">
+                  <button
+                    id="btn-editar-docentes"
+                    class="btn btn-info fw-bold text-white shadow-sm"
+                    onclick="toggleEdicionDocentes()"
+                  >
+                    <i class="fas fa-chalkboard-teacher me-1"></i> Asignar
+                    Docentes
+                  </button>
+                  <button
+                    id="btn-cancelar-docentes"
+                    class="btn btn-outline-secondary fw-bold shadow-sm d-none"
+                    onclick="cancelarEdicionDocentes()"
+                  >
+                    <i class="fas fa-times me-1"></i> Cancelar Asignación
+                  </button>
+                  <!-- Botones de Notas -->
+                  <button
+                    id="btn-editar-notas"
+                    class="btn btn-warning fw-bold text-dark shadow-sm"
+                    onclick="toggleEdicionNotas()"
+                  >
+                    <i class="fas fa-edit me-1"></i> Editar Notas
+                  </button>
+                  <button
+                    id="btn-cancelar-notas"
+                    class="btn btn-outline-secondary fw-bold shadow-sm d-none"
+                    onclick="cancelarEdicionNotas()"
+                  >
+                    <i class="fas fa-times me-1"></i> Cancelar
+                  </button>
+
+                  <!-- BOTONES FASE 06 -->
+                  <a
+                    id="link-reporte-fase6"
+                    href="#"
+                    target="_blank"
+                    class="btn btn-outline-success fw-bold shadow-sm"
+                  >
+                    <i class="fas fa-file-excel me-1"></i> Ver Reporte
+                  </a>
+                  <button
+                    class="btn btn-success fw-bold shadow-sm"
+                    onclick="exportarAReporteFase6()"
+                  >
+                    <i class="fas fa-cloud-upload-alt me-1"></i> Enviar a
+                    Reporte
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Tabla de Registros -->
+        <section
+          class="card p-0 border-0 shadow-sm overflow-hidden table-wrapper"
+        >
+          <div class="table-responsive">
+            <table id="tabla" class="table table-hover w-100 align-middle mb-0">
+              <thead class="table-dark-custom" id="tabla-head"></thead>
+              <tbody id="contenido" class="bg-white"></tbody>
+            </table>
+          </div>
+        </section>
+      </main>
+
+      <!-- MODAL EDITAR REGISTRO GENERAL -->
+      <div class="modal fade" id="modalEditar" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+          <div class="modal-content">
+            <form id="formEditar">
+              <div class="modal-header modal-header-custom">
+                <h5 class="fw-bold mb-0">
+                  <i class="fas fa-edit me-2"></i> Editar Registro Académico
+                </h5>
+                <button
+                  type="button"
+                  class="btn-close"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                ></button>
+              </div>
+
+              <div class="modal-body">
+                <input type="hidden" id="edit_id" />
+
+                <!-- Integrantes -->
+                <h6 class="text-primary fw-bold border-bottom pb-2 mb-3">
+                  <i class="fas fa-users me-1"></i> Integrantes del Equipo
+                </h6>
+                <div class="row">
+                  <div class="col-md-6 mb-3">
+                    <!-- Cambiado de col-md-4 a col-md-6 -->
+                    <label class="form-label" for="edit_n1"
+                      >Integrante 1 *</label
+                    >
+                    <input
+                      type="text"
+                      id="edit_n1"
+                      class="form-control"
+                      required
+                    />
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <!-- Cambiado de col-md-4 a col-md-6 -->
+                    <label class="form-label" for="edit_n2">Integrante 2</label>
+                    <input
+                      type="text"
+                      id="edit_n2"
+                      class="form-control"
+                      placeholder="Opcional"
+                    />
+                  </div>
+                </div>
+
+                <!-- Datos Academicos -->
+                <h6 class="text-primary fw-bold border-bottom pb-2 mb-3 mt-3">
+                  <i class="fas fa-graduation-cap me-1"></i> Datos del Proyecto
+                </h6>
+                <div class="row">
+                  <div class="col-md-12 mb-3">
+                    <label class="form-label" for="edit_correo"
+                      >Correo Institucional *</label
+                    >
+                    <input
+                      type="email"
+                      id="edit_correo"
+                      class="form-control"
+                      required
+                    />
+                  </div>
+                  <div class="col-md-12 mb-3">
+                    <label class="form-label" for="edit_prog"
+                      >Programa Académico</label
+                    >
+                    <select id="edit_prog" class="form-select">
+                      <option value="">Seleccione un programa...</option>
+                      <option value="Contabilidad">Contabilidad</option>
+                      <option
+                        value="Administración de Negocios Internacionales"
+                      >
+                        Administración de Negocios Internacionales
+                      </option>
+                    </select>
+                  </div>
+                  <div class="col-md-12 mb-3">
+                    <label class="form-label" for="edit_tema"
+                      >Tema Titulación</label
+                    >
+                    <input
+                      type="text"
+                      id="edit_tema"
+                      class="form-control"
+                      list="temas-list"
+                      placeholder="Escriba o seleccione un tema..."
+                    />
+                    <datalist id="temas-list"></datalist>
+                  </div>
+                </div>
+
+                <!-- Estados de Fases -->
+                <h6 class="text-primary fw-bold border-bottom pb-2 mb-3 mt-3">
+                  <i class="fas fa-tasks me-1"></i> Control del Flujo de Fases
+                </h6>
+                <div class="row">
+                  <div class="col-md-4 mb-3">
+                    <label class="form-label" for="edit_estado_fase0"
+                      >Estado F0 (Registro)</label
+                    >
+                    <select id="edit_estado_fase0" class="form-select" required>
+                      <option value="">SIN INICIAR</option>
+                      <option value="EVALUANDO_FASE0">EVALUANDO</option>
+                      <option value="APTO_FASE0">APTO</option>
+                      <option value="NO_APTO_FASE0">NO APTO</option>
+                      <option value="ENVIADO_FASE0">ENVIADO</option>
+                    </select>
+                  </div>
+                  <div class="col-md-4 mb-3">
+                    <label class="form-label" for="edit_estado"
+                      >Estado F1 (Base)</label
+                    >
+                    <select id="edit_estado" class="form-select">
+                      <option value="">SIN INICIAR</option>
+                      <option value="PENDIENTE">PENDIENTE</option>
+                      <option value="COMPLETADO">COMPLETADO</option>
+                      <option value="ENVIADO">ENVIADO</option>
+                    </select>
+                  </div>
+                  <div class="col-md-4 mb-3">
+                    <label class="form-label" for="edit_estado_fase2"
+                      >Estado F2 (Prototipo)</label
+                    >
+                    <select id="edit_estado_fase2" class="form-select">
+                      <option value="">SIN INICIAR</option>
+                      <option value="PENDIENTE_FASE2">PENDIENTE</option>
+                      <option value="COMPLETADO_FASE2">COMPLETADO</option>
+                      <option value="ENVIADO_FASE2">ENVIADO</option>
+                    </select>
+                  </div>
+                  <div class="col-md-4 mb-3">
+                    <label class="form-label" for="edit_estado_fase3"
+                      >Estado F3 (Dictamen)</label
+                    >
+                    <select id="edit_estado_fase3" class="form-select">
+                      <option value="">SIN INICIAR</option>
+                      <option value="PENDIENTE_FASE3">PENDIENTE</option>
+                      <option value="COMPLETADO_FASE3">COMPLETADO</option>
+                      <option value="ENVIADO_FASE3">ENVIADO</option>
+                    </select>
+                  </div>
+                  <div class="col-md-4 mb-3">
+                    <label class="form-label" for="edit_estado_fase4"
+                      >Estado F4 (Preguntas)</label
+                    >
+                    <select id="edit_estado_fase4" class="form-select">
+                      <option value="">SIN INICIAR</option>
+                      <option value="PENDIENTE_FASE4">PENDIENTE</option>
+                      <option value="COMPLETADO_FASE4">COMPLETADO</option>
+                      <option value="ENVIADO_FASE4">ENVIADO</option>
+                    </select>
+                  </div>
+                  <div class="col-md-4 mb-3">
+                    <label class="form-label" for="edit_estado_fase5"
+                      >Estado F4.1 (Video)</label
+                    >
+                    <select id="edit_estado_fase5" class="form-select">
+                      <option value="">SIN INICIAR</option>
+                      <option value="ESPERANDO_VIDEO">ESPERANDO VIDEO</option>
+                      <option value="POR_CALIFICAR">POR CALIFICAR</option>
+                      <option value="CALIFICADO">CALIFICADO</option>
+                    </select>
+                  </div>
+                  <div class="col-md-4 mb-3">
+                    <label class="form-label" for="edit_estado_fase6"
+                      >Estado F4.2 (Final)</label
+                    >
+                    <select id="edit_estado_fase6" class="form-select">
+                      <option value="">SIN INICIAR</option>
+                      <option value="COMPLETADO_FASE6">COMPLETADO</option>
+                      <option value="ENVIADO_FASE6">ENVIADO</option>
+                    </select>
+                  </div>
+                </div>
+                <h6 class="text-primary fw-bold border-bottom pb-2 mb-3 mt-3">
+                  <i class="fas fa-user-check me-1"></i> Validación de
+                  Requisitos (Fase 0)
+                </h6>
+                <div class="row">
+                  <div class="col-md-6 mb-3">
+                    <label class="form-label" for="edit_academico_f0"
+                      >Requisito Académico</label
+                    >
+                    <select id="edit_academico_f0" class="form-select">
+                      <option value="">Pendiente de Evaluar</option>
+                      <option value="APTO">APTO</option>
+                      <option value="NO_APTO">NO APTO</option>
+                    </select>
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <label class="form-label" for="edit_economico_f0"
+                      >Requisito Económico</label
+                    >
+                    <select id="edit_economico_f0" class="form-select">
+                      <option value="">Pendiente de Evaluar</option>
+                      <option value="APTO">APTO</option>
+                      <option value="NO_APTO">NO APTO</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <div class="modal-footer">
+                <button
+                  type="button"
+                  class="btn btn-outline-secondary px-4"
+                  data-bs-dismiss="modal"
+                >
+                  Cancelar
+                </button>
+                <button type="submit" class="btn btn-primary px-4">
+                  <i class="fas fa-save me-1"></i> Guardar Cambios
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- MODAL EDITAR FASE DE DEFENSA -->
+      <div class="modal fade" id="modalEditarDefensa" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+          <div class="modal-content">
+            <form id="formEditarDefensa">
+              <div class="modal-header modal-header-custom">
+                <h5 class="fw-bold mb-0">
+                  <i class="fas fa-video me-2"></i> Editar Registro - Defensa y
+                  Notas
+                </h5>
+                <button
+                  type="button"
+                  class="btn-close"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                ></button>
+              </div>
+              <div class="modal-body">
+                <input type="hidden" id="def_id" />
+
+                <!-- Correos -->
+                <h6 class="text-primary fw-bold border-bottom pb-2 mb-3">
+                  <i class="fas fa-envelope me-1"></i> Notificación a Correos
+                  Asignados
+                </h6>
+                <div class="row">
+                  <div class="col-md-6 mb-3">
+                    <label class="form-label" for="def_correo"
+                      >Correo Principal</label
+                    >
+                    <input type="email" id="def_correo" class="form-control" />
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <label class="form-label" for="def_correo1"
+                      >Correo Integrante 2</label
+                    >
+                    <input
+                      type="email"
+                      id="def_correo1"
+                      class="form-control"
+                      placeholder="Opcional"
+                    />
+                  </div>
+                </div>
+
+                <!-- NUEVA FILA: SELECCIÓN DE DOCENTE ASIGNADO EN LA DEFENSA (IEmpresa) -->
+                <div class="row">
+                  <div class="col-md-12 mb-3">
+                    <label class="form-label" for="def_docente"
+                      >Docente Asignado</label
+                    >
+                    <select id="def_docente" class="form-select">
+                      <option value="">Seleccione un docente...</option>
+                    </select>
+                  </div>
+                </div>
+
+                <!-- Preguntas -->
+                <h6 class="text-primary fw-bold border-bottom pb-2 mb-3 mt-3">
+                  <i class="fas fa-question-circle me-1"></i> Banco de Preguntas
+                  y Sustentación
+                </h6>
+                <div class="row">
+                  <div class="col-md-6 mb-2">
+                    <input
+                      type="text"
+                      id="def_p1"
+                      class="form-control"
+                      placeholder="Pregunta Metodológica 1"
+                    />
+                  </div>
+                  <div class="col-md-6 mb-2">
+                    <input
+                      type="text"
+                      id="def_p2"
+                      class="form-control"
+                      placeholder="Pregunta Metodológica 2"
+                    />
+                  </div>
+                  <div class="col-md-6 mb-2">
+                    <input
+                      type="text"
+                      id="def_p3"
+                      class="form-control"
+                      placeholder="Pregunta Metodológica 3"
+                    />
+                  </div>
+                  <div class="col-md-6 mb-2">
+                    <input
+                      type="text"
+                      id="def_p4"
+                      class="form-control"
+                      placeholder="Pregunta de Investigación 4"
+                    />
+                  </div>
+                  <div class="col-md-6 mb-2">
+                    <input
+                      type="text"
+                      id="def_p5"
+                      class="form-control"
+                      placeholder="Pregunta de Investigación 5"
+                    />
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <input
+                      type="text"
+                      id="def_p6"
+                      class="form-control"
+                      placeholder="Pregunta de Investigación 6"
+                    />
+                  </div>
+                  <div class="col-md-12 mb-3">
+                    <label class="form-label" for="def_video"
+                      >URL del Video de Defensa (Fase 4.1)</label
+                    >
+                    <input
+                      type="url"
+                      id="def_video"
+                      class="form-control"
+                      placeholder="https://youtube.com/watch?v=..."
+                    />
+                  </div>
+                  <div class="col-md-12 mb-3">
+                    <label class="form-label" for="def_rubrica"
+                      >URL de la Rúbrica de Evaluación (Google Sheets)</label
+                    >
+                    <input
+                      type="url"
+                      id="def_rubrica"
+                      class="form-control"
+                      placeholder="https://docs.google.com/spreadsheets/d/..."
+                    />
+                  </div>
+                </div>
+
+                <!-- Calificaciones -->
+                <!-- Calificaciones -->
+                <h6 class="text-primary fw-bold border-bottom pb-2 mb-3 mt-3">
+                  <i class="fas fa-star me-1"></i> Panel de Calificaciones
+                  (Escala 0 - 20)
+                </h6>
+                <div class="row">
+                  <div class="col-md-4 mb-3">
+                    <label class="form-label" for="def_nota3"
+                      >Nota Fase 3 (Dictamen)</label
+                    >
+                    <input
+                      type="number"
+                      id="def_nota3"
+                      class="form-control calc-nota"
+                      step="0.01"
+                      min="0"
+                      max="20"
+                      placeholder="0.00"
+                    />
+                  </div>
+                  <div class="col-md-4 mb-3">
+                    <label class="form-label" for="def_nota5"
+                      >Nota Fase 4.1 (Defensa)</label
+                    >
+                    <input
+                      type="number"
+                      id="def_nota5"
+                      class="form-control calc-nota"
+                      step="0.01"
+                      min="0"
+                      max="20"
+                      placeholder="0.00"
+                    />
+                  </div>
+                  <div class="col-md-4 mb-3">
+                    <label
+                      class="form-label text-success fw-bold"
+                      for="def_nota_final"
+                      >Nota Final Promediada</label
+                    >
+                    <input
+                      type="number"
+                      id="def_nota_final"
+                      class="form-control bg-light text-success fw-bold"
+                      readonly
+                      placeholder="Promedio..."
+                    />
+                  </div>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button
+                  type="button"
+                  class="btn btn-outline-secondary"
+                  data-bs-dismiss="modal"
+                >
+                  Cancelar
+                </button>
+                <button type="submit" class="btn btn-success">
+                  <i class="fas fa-save me-1"></i> Guardar Defensa
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="admin.js"></script>
+  </body>
+</html>
