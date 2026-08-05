@@ -1,0 +1,437 @@
+/* Variables Globales JVN */
+:root {
+  --primary-ie: #F15A24;    /* Naranja Instituto - CTA y Marca */
+  --dark-ie: #002D56;       /* Azul Empresa - Títulos y Navegación */
+  --accent-ie: #FF8200;     /* Naranja Energía - Hovers e Iconos */
+  --highlight-ie: #0A1F44;  /* Azul Prestigio - Textos y Importancia */
+  --light-gray: #F4F4F4;    /* Gris Niebla - Fondos secundarios */
+  --border-color: #d1d5db;
+  --text-dark: #0A1F44;     /* Azul Prestigio para lectura */
+  --text-muted: #64748b;
+  --background-white: #FFFFFF;
+}
+
+/* Reset y Base */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Inter", sans-serif;
+  color: var(--text-dark);
+  background-color: var(--dark-ie); /* Fondo Azul Empresa */
+  min-height: 100vh;
+  display: flex;
+}
+
+.main-container {
+  display: flex;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Panel de Imagen Izquierda */
+.image-panel {
+  width: 40%;
+  background-image: url("img/img_fase01.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: 50% center;
+  position: relative;
+}
+
+.image-panel::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0);
+}
+
+/* Panel de Formulario Derecha */
+.form-panel {
+  width: 60%;
+  background: var(--background-white);
+  padding: 3rem 5rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-header {
+  margin-bottom: 2.5rem;
+}
+.form-header h1 {
+  color: var(--dark-ie); /* Cambio a Púrpura Medianoche */
+  font-size: 2.2rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+.form-header p {
+  color: var(--text-muted);
+  font-size: 1rem;
+}
+
+/* Stepper de Progreso */
+.progress-bar {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 3rem;
+  position: relative;
+}
+
+.progress-bar::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  height: 3px;
+  width: 100%;
+  background-color: var(--border-color);
+  z-index: 1;
+}
+
+.progress-line {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  height: 3px;
+  background-color: var(--primary-ie); /* Cambio a Morado JVN */
+  z-index: 1;
+  width: 0%;
+  transition: width 0.4s ease;
+}
+
+.progress-step {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  background-color: white;
+  border: 2px solid var(--border-color);
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  z-index: 2;
+  transition: all 0.3s ease;
+}
+
+.progress-step.active {
+  background-color: var(--primary-ie); /* Cambio a Morado JVN */
+  color: white;
+  border-color: var(--primary-ie);
+  box-shadow: 0 0 0 4px rgba(75, 0, 130, 0.2); /* Sombra en tono morado */
+}
+
+/* Lógica de Pasos (Steps) */
+.form-step {
+  display: none;
+}
+.form-step.active {
+  display: block;
+  animation: slideUp 0.5s ease;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Inputs y Selección */
+.field-group {
+  margin-bottom: 1.5rem;
+}
+.field-label {
+  display: block;
+  margin-bottom: 0.6rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--highlight-ie);
+}
+.required-star {
+  color: var(--highlight-ie); /* Cambio a Lavanda Intenso */
+  margin-left: 3px;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="url"],
+select {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  border: 1.5px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: all 0.3s;
+  background-color: var(--light-gray);
+}
+
+input:focus,
+select:focus {
+  outline: none;
+  border-color: var(--primary-ie); /* Cambio a Morado JVN */
+  background-color: white;
+  box-shadow: 0 0 0 4px rgba(75, 0, 130, 0.1);
+}
+
+/* Opciones de Temas Dinámicos */
+.theme-option {
+  border: 1.5px solid var(--border-color);
+  padding: 1.2rem 1rem;
+  border-radius: 10px;
+  margin-bottom: 0.8rem;
+  cursor: pointer;
+  display: flex;
+  align-items: flex-start; /* Cambio de center a flex-start para alineación superior */
+  gap: 12px;
+  transition: all 0.2s ease;
+  background-color: var(--light-gray);
+}
+
+.theme-option:hover {
+  background-color: #fff5f2; /* Tinte naranja muy claro */
+  border-color: var(--accent-ie);
+  transform: translateY(-1px);
+}
+
+.theme-option input[type="radio"] {
+  margin: 0;
+  margin-top: 2px; /* Alinea el círculo con la primera línea de texto */
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0; /* EVITA que el círculo se aplaste o cambie de tamaño */
+  accent-color: var(--primary-ie);
+  cursor: pointer;
+  outline: none; /* Elimina el recuadro de enfoque por defecto */
+}
+
+/* Modifica o agrega esto para limpiar el enfoque en los radio buttons */
+input[type="radio"]:focus {
+  outline: none;
+  box-shadow: none; /* Quita cualquier sombra o resplandor cuadrado */
+}
+
+/* Opcional: Si quieres que toda la tarjeta se vea seleccionada de forma limpia */
+.theme-option:has(input:checked) {
+  border-color: var(--primary-ie);
+  background-color: #f5f0ff;
+  box-shadow: 0 0 0 1px var(--primary-ie);
+}
+
+.theme-option span {
+  cursor: pointer;
+  user-select: none;
+  font-size: 0.95rem;
+  line-height: 1.4;
+  color: var(--highlight-ie);
+}
+
+/* Botonera */
+.navigation-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 2.5rem;
+}
+
+.nav-btn {
+  padding: 0.8rem 2.2rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+  border: none;
+}
+
+.btn-next {
+  background-color: var(--primary-ie); /* Cambio a Morado JVN */
+  color: white;
+}
+
+.btn-prev {
+  background-color: #e2e8f0;
+  color: var(--highlight-ie);
+}
+
+.nav-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  background-color: var(--accent-ie); /* Naranja Energía en hover */
+  color: white;
+}
+
+.nav-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Loader y Estados Finales */
+.loader-container {
+  text-align: center;
+  display: none;
+  margin-top: 2rem;
+  padding: 2rem 0;
+}
+.progress-custom {
+  height: 10px;
+  background: var(--light-gray);
+  border-radius: 5px;
+  overflow: hidden;
+  margin: 15px 0;
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--primary-ie); /* Cambio a Morado JVN */
+  width: 0%;
+  transition: width 0.4s;
+}
+
+/* Responsividad */
+@media (max-width: 992px) {
+  .main-container {
+    flex-direction: column;
+    height: auto;
+  }
+  .image-panel {
+    background-position: center 25%;
+    width: 100%;
+    height: 200px;
+  }
+  .form-panel {
+    width: 100%;
+    padding: 2rem;
+  }
+}
+
+/* Estilo para la barra de progreso de SweetAlert */
+.swal2-html-container {
+  overflow: hidden;
+}
+
+.swal-progress-container {
+  width: 100%;
+  background-color: var(--light-gray);
+  border-radius: 10px;
+  margin-top: 15px;
+}
+
+.swal-progress-bar {
+  width: 0%;
+  height: 10px;
+  background-color: var(--primary-ie); /* Cambio a Morado JVN */
+  border-radius: 10px;
+  transition: width 0.3s ease;
+}
+
+.image-panel-v0 {
+  background-image: url("img/img_fase00.png");
+  background-position: 80% center;
+  background-size: cover;
+}
+
+/* =========================================
+   VARIANTES DE DISEÑO (Fase 02 y Fase 03)
+========================================= */
+
+/* 1. Ajuste para Fase 02 */
+.image-panel-v2 {
+  background-image: url("img/img_fase02.png");
+  background-position: 50% center;
+  background-size: cover;
+}
+
+/* 2. Ajuste para Fase 03 (Imagen Independiente) */
+.image-panel-v3 {
+  background-image: url("img/img_fase03.png"); /* Imagen específica Fase 03 */
+  background-position: center;
+  background-size: cover;
+}
+
+/* 2. Inversión de columnas para Fase 03 (Imagen a la derecha) */
+.main-container-reverse {
+  flex-direction: row-reverse;
+}
+@media (max-width: 992px) {
+  .main-container-reverse {
+    flex-direction: column; /* En móviles vuelve a la normalidad */
+  }
+}
+
+/* 3. Estilos de la zona de subida (Dropzone) unificados */
+.upload-area {
+  border: 2px dashed var(--primary-ie);
+  border-radius: 10px;
+  padding: 2rem;
+  text-align: center;
+  background-color: var(--light-gray);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-bottom: 1.5rem;
+}
+
+.upload-area:hover {
+  background-color: #fff5f2;
+  border-color: var(--accent-ie);
+  transform: translateY(-2px);
+}
+
+.upload-area i {
+  font-size: 3rem;
+  color: var(--primary-ie);
+  margin-bottom: 1rem;
+}
+
+#fileInfo {
+  margin-top: 10px;
+  font-weight: 600;
+  color: var(--dark-ie);
+}
+
+.upload-area.dragover {
+  background-color: #fff5f2;
+  border-color: var(--highlight-ie);
+  transform: scale(1.02);
+}
+
+/* Estilo específico para la Fase 05 */
+.image-panel-v5 {
+  background-image: url("img/img_fase05.png");
+  /* Ajustado para que la imagen se mueva un poco a la izquierda */
+  background-position: 50% center;
+  background-size: cover;
+}
+
+/* Mejora del cuadro de preview de Youtube */
+.youtube-preview {
+  margin-top: 15px;
+  padding: 1rem;
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: 8px;
+  display: none;
+  animation: slideUp 0.3s ease;
+}
+
+#resultCard {
+  animation: slideUp 0.5s ease forwards;
+  background: var(--light-gray);
+  border-radius: 15px;
+  border: 1px solid var(--border-color);
+  margin-top: 1rem;
+}
+
+#statusText {
+  font-weight: 700;
+  color: var(--dark-ie);
+  margin-top: 10px;
+}
